@@ -28,7 +28,9 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.messaging.Message;
 import org.springframework.modulith.events.EventExternalizationConfiguration;
+import org.springframework.modulith.events.RoutingTarget;
 import org.springframework.modulith.events.config.EventExternalizationAutoConfiguration;
 import org.springframework.modulith.events.support.DelegatingEventExternalizer;
 
@@ -48,6 +50,21 @@ import org.springframework.modulith.events.support.DelegatingEventExternalizer;
 public class SpringCloudStreamEventExternalizerConfiguration {
 
 	private static final Logger log = LoggerFactory.getLogger(SpringCloudStreamEventExternalizerConfiguration.class);
+
+	@Bean
+	EventExternalizationConfiguration eventExternalizationConfiguration() {
+		return EventExternalizationConfiguration.externalizing()
+				.select(event -> event instanceof Message<?> && getTarget(event) != null)
+				.routeAll(event -> RoutingTarget.forTarget(getTarget(event)).withoutKey())
+				.build();
+	}
+
+	private String getTarget(Object event) {
+		if(event instanceof Message<?> message) {
+			return message.getHeaders().get(SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER, String.class);
+		}
+		return null;
+	}
 
 	@Bean
 	DelegatingEventExternalizer springCloudStreamMessageExternalizer(
