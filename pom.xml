@@ -42,9 +42,8 @@
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>central-snapshots</id>
-            <name>Maven Central Snapshot Repository</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/ZenWave360/zenwave-spring-modulith-events-spring-cloud-stream</url>
         </snapshotRepository>
     </distributionManagement>
 
