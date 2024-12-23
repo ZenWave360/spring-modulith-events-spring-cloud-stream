@@ -20,11 +20,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-          server-id: central
+          server-id: github
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
 
-      - name: Build and Publish SNAPSHOT to the Maven Central
+      - name: Build and Publish SNAPSHOT to the GitHub Package Registry
         if: ${{ github.event_name == 'push' }}
         run: mvn -B verify deploy -DdeployAtEnd=true
         env:
