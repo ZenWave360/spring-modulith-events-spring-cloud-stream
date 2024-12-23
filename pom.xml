@@ -10,7 +10,7 @@
         <relativePath />
     </parent>
 
-    <groupId>io.github.zenwave360.zenwave-sdk</groupId>
+    <groupId>io.zenwave360.zenwave-sdk</groupId>
     <artifactId>zenwave-spring-modulith-events-spring-cloud-stream</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
