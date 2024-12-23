@@ -23,7 +23,8 @@ jobs:
 
       - name: Build and Deploy Snapshots to a GitHub Branch
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_ACTOR: ${{ secrets.GH_ACTOR }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           # Set up a local repository branch for Maven deployment
           SNAPSHOT_BRANCH="maven-snapshots"
@@ -41,8 +42,7 @@ jobs:
           cd target-branch
           git add repo
           git commit -m "Deploy new snapshots [skip ci]" || echo "No changes to commit"
-          # git push origin "$SNAPSHOT_BRANCH"
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+          git push origin "$SNAPSHOT_BRANCH"
 
       - name: Generate JaCoCo Badge
         id: jacoco
