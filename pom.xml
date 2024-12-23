@@ -42,9 +42,9 @@
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>central</id>
+            <id>central-snapshots</id>
             <name>Maven Central Snapshot Repository</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
