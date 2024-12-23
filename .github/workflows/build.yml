@@ -20,18 +20,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-          server-id: github
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-
-      - name: Build and Publish SNAPSHOT to the GitHub Package Registry
-        if: ${{ github.event_name == 'push' }}
-        run: mvn -B verify deploy -DdeployAtEnd=true
-        env:
-          MAVEN_USERNAME: ${{ secrets.GH_ACTOR }}
-          MAVEN_PASSWORD: ${{ secrets.GH_TOKEN }}
-          SIGN_KEY: ${{ secrets.SIGN_KEY }}
-          SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
 
       - name: Build and Deploy Snapshots to a GitHub Branch
         env:
@@ -54,10 +42,6 @@ jobs:
           git add repo
           git commit -m "Deploy new snapshots [skip ci]" || echo "No changes to commit"
           git push origin "$SNAPSHOT_BRANCH"
-
-#      - name: Build and Verify
-#        if: ${{ github.event_name == 'pull_request' }}
-#        run: mvn -B verify
 
       - name: Generate JaCoCo Badge
         id: jacoco
