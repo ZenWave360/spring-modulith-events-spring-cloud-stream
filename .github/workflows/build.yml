@@ -29,9 +29,31 @@ jobs:
         run: mvn -B verify deploy -DdeployAtEnd=true
         env:
           MAVEN_USERNAME: ${{ secrets.GH_ACTOR }}
-          MAVEN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_PASSWORD: ${{ secrets.GH_TOKEN }}
           SIGN_KEY: ${{ secrets.SIGN_KEY }}
           SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
+
+      - name: Build and Deploy Snapshots to a GitHub Branch
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          # Set up a local repository branch for Maven deployment
+          SNAPSHOT_BRANCH="maven-snapshots"
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          # Clone the target branch for deployment
+          git clone --branch "$SNAPSHOT_BRANCH" "https://${GH_ACTOR}:${GH_TOKEN}@github.com/${{ github.repository }}.git" target-branch || \
+            git clone --branch main "https://${GH_ACTOR}:${GH_TOKEN}@github.com/${{ github.repository }}.git" target-branch
+
+          # Build the project and deploy to the local repo branch
+          mvn clean deploy -DaltDeploymentRepository=snapshot-repo::default::file://$(pwd)/target-branch/repo
+
+          # Push the updated snapshots to the branch
+          cd target-branch
+          git add repo
+          git commit -m "Deploy new snapshots [skip ci]" || echo "No changes to commit"
+          git push origin "$SNAPSHOT_BRANCH"
 
 #      - name: Build and Verify
 #        if: ${{ github.event_name == 'pull_request' }}
@@ -61,5 +83,5 @@ jobs:
           gh pr comment ${{github.event.pull_request.number}} -b "${BODY}"
         continue-on-error: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
