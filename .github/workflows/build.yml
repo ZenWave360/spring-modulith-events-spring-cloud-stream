@@ -23,7 +23,7 @@ jobs:
 
       - name: Build and Deploy Snapshots to a GitHub Branch
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           # Set up a local repository branch for Maven deployment
           SNAPSHOT_BRANCH="maven-snapshots"
