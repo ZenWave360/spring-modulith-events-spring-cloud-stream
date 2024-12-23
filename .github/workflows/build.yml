@@ -41,7 +41,8 @@ jobs:
           cd target-branch
           git add repo
           git commit -m "Deploy new snapshots [skip ci]" || echo "No changes to commit"
-          git push origin "$SNAPSHOT_BRANCH"
+          # git push origin "$SNAPSHOT_BRANCH"
+          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
 
       - name: Generate JaCoCo Badge
         id: jacoco
