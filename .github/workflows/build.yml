@@ -38,7 +38,7 @@ jobs:
           GROUP_ID=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)
           ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          STAGING_BRANCH="staging-$GROUP_ID:$ARTIFACT_ID:$VERSION-$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")"
+          STAGING_BRANCH="staging/$GROUP_ID/$ARTIFACT_ID/$VERSION/$(date -u +"%Y%m%d.%H%M%S%3N")"
           
           # Build the project and deploy to the local repo branch
           mvn clean deploy -DaltDeploymentRepository=snapshot-repo::default::file://$(pwd)/target-branch/
