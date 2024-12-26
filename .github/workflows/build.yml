@@ -47,7 +47,7 @@ jobs:
           cd target-branch
           git add -A
           git commit -m "Deploy $GROUP_ID:$ARTIFACT_ID:$VERSION" || echo "No changes to commit"
-          git co -b "$STAGING_BRANCH"
+          git checkout -b "$STAGING_BRANCH"
           git push origin
 
       - name: Generate JaCoCo Badge
