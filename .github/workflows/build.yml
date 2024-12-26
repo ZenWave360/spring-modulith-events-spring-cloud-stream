@@ -31,17 +31,22 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          STAGING_BRANCH="staging"
           # Clone the target branch for deployment
-          git clone --branch "$STAGING_BRANCH" "https://${GH_ACTOR}:${GH_TOKEN}@github.com/${GH_SNAPSHOTS_REPO}.git" target-branch
-
+          git clone --branch main "https://${GH_ACTOR}:${GH_TOKEN}@github.com/${GH_SNAPSHOTS_REPO}.git" target-branch
+          
+          # Calculate the Maven coordinates and Target Branch
+          GROUP_ID=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)
+          ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          STAGING_BRANCH="staging-$GROUP_ID:$ARTIFACT_ID:$VERSION-$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")"
+          
           # Build the project and deploy to the local repo branch
           mvn clean deploy -DaltDeploymentRepository=snapshot-repo::default::file://$(pwd)/target-branch/
 
           # Push the updated snapshots to the branch
           cd target-branch
           git add -A
-          git commit -m "Deploy new snapshots [skip ci]" || echo "No changes to commit"
+          git commit -m "Deploy $GROUP_ID:$ARTIFACT_ID:$VERSION" || echo "No changes to commit"
           git push origin "$STAGING_BRANCH"
 
       - name: Generate JaCoCo Badge
