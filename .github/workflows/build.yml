@@ -49,6 +49,9 @@ jobs:
           git commit -m "Deploy $GROUP_ID:$ARTIFACT_ID:$VERSION" || echo "No changes to commit"
           git checkout -b "$STAGING_BRANCH"
           git push -u origin "$STAGING_BRANCH"
+          
+          # Create a pull request using GitHub CLI
+          gh pr create --title "Deploy $GROUP_ID:$ARTIFACT_ID:$VERSION" --base main --head "$STAGING_BRANCH"
 
       - name: Generate JaCoCo Badge
         id: jacoco
