@@ -1,4 +1,4 @@
-# ZenWave Spring-Modulith Events Externalizer for Spring Cloud Stream
+# Spring-Modulith Events Externalizer for Spring Cloud Stream
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.zenwave360.sdk/spring-modulith-events-scs.svg?label=Maven%20Central&logo=apachemaven)](https://search.maven.org/artifact/io.zenwave360.sdk/spring-modulith-events-scs)
 [![build](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream/workflows/Build/badge.svg)](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream/actions/workflows/build.yml)
@@ -32,11 +32,13 @@ public class SpringCloudStreamEventsConfig {
 }
 ```
 
-This configuration ensures that all events of type `org.springframework.messaging.Message` with the header `SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_EVENT_HEADER` will be routed to their specified destination.
+This configuration ensures that all events of type `org.springframework.messaging.Message` with the header `SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_EVENT_HEADER` will be externalized and routed to their specified destination.
 
 ---
 
 ## Event Serialization
+
+Using the transactional event publication log requires serializing events to a format that can be stored in a database. This library provides support for JSON and Avro serialization formats of `Message<?>` payloads.
 
 ### JSON Serialization
 Provides an `EventSerializer` that serializes `Message<?>` payloads into JSON format suitable for data storage adding a `_class` field to indicate the class type of the payload (needed for deserialization).
@@ -49,7 +51,7 @@ If `com.fasterxml.jackson.dataformat.avro.AvroMapper` is present in the classpat
 ## Routing Events
 
 ### Programmatic Routing
-You can define routing targets programmatically using Spring Messages:
+You can define routing targets programmatically using a Message header:
 
 ```java
 public class CustomerEventsProducer implements ICustomerEventsProducer {
@@ -58,7 +60,9 @@ public class CustomerEventsProducer implements ICustomerEventsProducer {
 
     public void onCustomerCreated(CustomerCreated event) {
         Message<CustomerCreated> message = MessageBuilder.withPayload(event)
-                .setHeader(SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER, "customer-created")
+                .setHeader(
+                        SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER, 
+                        "customer-created") // <- target binding name
                 .build();
         applicationEventPublisher.publishEvent(message);
     }
@@ -66,7 +70,7 @@ public class CustomerEventsProducer implements ICustomerEventsProducer {
 ```
 
 ### Annotation-Based Routing
-Leverage the `@Externalized` annotation to define routing dynamically:
+Leverage the `@Externalized` annotation to define the target binding name and routing key:
 
 ```java
 @Externalized("customer-created::#{#this.getLastname()}")
@@ -89,7 +93,7 @@ spring:
           destination: customer-created
 ```
 
-With this configuration, the `SpringCloudStreamEventExternalizer` dynamically sets the routing key (e.g., `kafka_messageKey` or `rabbit_routingKey`) based on the channel binder.
+`SpringCloudStreamEventExternalizer` dynamically sets the appropriate routing key (e.g., `kafka_messageKey` or `rabbit_routingKey`) based on the channel binder.
 
 ---
 
