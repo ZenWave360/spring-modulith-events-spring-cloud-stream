@@ -10,14 +10,14 @@
         <relativePath />
     </parent>
 
-    <groupId>io.zenwave360.zenwave-sdk</groupId>
-    <artifactId>zenwave-spring-modulith-events-spring-cloud-stream</artifactId>
+    <groupId>io.zenwave360.sdk</groupId>
+    <artifactId>spring-modulith-events-scs</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>ZenWave Spring-Modulith events externalizer for Spring Cloud Stream</description>
-    <url>https://github.com/ZenWave360/zenwave-spring-modulith-events-spring-cloud-stream/</url>
+    <url>https://github.com/ZenWave360/spring-modulith-events-scs/</url>
 
     <licenses>
         <license>
@@ -42,15 +42,15 @@
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/ZenWave360/zenwave-spring-modulith-events-spring-cloud-stream</url>
+            <id>zenwave-maven-snapshots</id>
+            <url>https://raw.githubusercontent.com/ZenWave360/maven-snapshots/refs/heads/main</url>
         </snapshotRepository>
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git://github.com/ZenWave360/zenwave-spring-modulith-events-spring-cloud-stream.git</connection>
+        <connection>scm:git:git://github.com/ZenWave360/spring-modulith-events-scs.git</connection>
         <developerConnection>scm:git:git@github.com:ZenWave360/ZenWave360.git</developerConnection>
-        <url>https://github.com/ZenWave360/zenwave-spring-modulith-events-spring-cloud-stream/</url>
+        <url>https://github.com/ZenWave360/spring-modulith-events-scs/</url>
         <tag>HEAD</tag>
     </scm>
 

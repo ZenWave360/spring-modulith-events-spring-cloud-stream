@@ -25,24 +25,23 @@ jobs:
         env:
           GH_ACTOR: ${{ secrets.GH_ACTOR }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_SNAPSHOTS_REPO: maven-snapshots
         run: |
           # Set up a local repository branch for Maven deployment
-          SNAPSHOT_BRANCH="maven-snapshots"
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
           # Clone the target branch for deployment
-          git clone --branch "$SNAPSHOT_BRANCH" "https://${GH_ACTOR}:${GH_TOKEN}@github.com/${{ github.repository }}.git" target-branch || \
-            git clone --branch main "https://${GH_ACTOR}:${GH_TOKEN}@github.com/${{ github.repository }}.git" target-branch
+          git clone --branch main "https://${GH_ACTOR}:${GH_TOKEN}@github.com/${GH_SNAPSHOTS_REPO}.git" target-branch
 
           # Build the project and deploy to the local repo branch
-          mvn clean deploy -DaltDeploymentRepository=snapshot-repo::default::file://$(pwd)/target-branch/repo
+          mvn clean deploy -DaltDeploymentRepository=snapshot-repo::default::file://$(pwd)/target-branch/
 
           # Push the updated snapshots to the branch
           cd target-branch
-          git add repo
+          git add -A
           git commit -m "Deploy new snapshots [skip ci]" || echo "No changes to commit"
-          git push origin "$SNAPSHOT_BRANCH"
+          git push origin
 
       - name: Generate JaCoCo Badge
         id: jacoco
