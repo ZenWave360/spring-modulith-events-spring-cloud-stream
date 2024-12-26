@@ -48,7 +48,7 @@ jobs:
           git add -A
           git commit -m "Deploy $GROUP_ID:$ARTIFACT_ID:$VERSION" || echo "No changes to commit"
           git checkout -b "$STAGING_BRANCH"
-          git push origin
+          git push -u origin "$STAGING_BRANCH"
 
       - name: Generate JaCoCo Badge
         id: jacoco
