@@ -20,22 +20,35 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-          server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
 
-      - name: Build and Publish SNAPSHOT to the Maven Central
-        if: ${{ github.event_name == 'push' }}
-        run: mvn -B verify deploy -DdeployAtEnd=true
+      - name: Build and Deploy Snapshots to a GitHub Branch
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          SIGN_KEY: ${{ secrets.SIGN_KEY }}
-          SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
+          GH_ACTOR: ${{ secrets.GH_ACTOR }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_SNAPSHOTS_REPO: "ZenWave360/maven-snapshots"
+        run: |
+          # Set up a local repository branch for Maven deployment
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
 
-#      - name: Build and Verify
-#        if: ${{ github.event_name == 'pull_request' }}
-#        run: mvn -B verify
+          # Clone the target branch for deployment
+          git clone --branch main "https://${GH_ACTOR}:${GH_TOKEN}@github.com/${GH_SNAPSHOTS_REPO}.git" target-branch
+          
+          # Calculate the Maven coordinates and Target Branch
+          GROUP_ID=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)
+          ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          STAGING_BRANCH="staging/$GROUP_ID/$ARTIFACT_ID/$VERSION/$(date -u +"%Y%m%d.%H%M%S%3N")"
+          
+          # Build the project and deploy to the local repo branch
+          mvn clean deploy -DaltDeploymentRepository=snapshot-repo::default::file://$(pwd)/target-branch/
+
+          # Push the updated snapshots to the branch
+          cd target-branch
+          git add -A
+          git commit -m "Deploy $GROUP_ID:$ARTIFACT_ID:$VERSION" || echo "No changes to commit"
+          git checkout -b "$STAGING_BRANCH"
+          git push -u origin "$STAGING_BRANCH"
 
       - name: Generate JaCoCo Badge
         id: jacoco
@@ -61,5 +74,5 @@ jobs:
           gh pr comment ${{github.event.pull_request.number}} -b "${BODY}"
         continue-on-error: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 

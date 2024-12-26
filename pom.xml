@@ -10,14 +10,14 @@
         <relativePath />
     </parent>
 
-    <groupId>io.github.zenwave360.zenwave-sdk</groupId>
-    <artifactId>zenwave-spring-modulith-events-spring-cloud-stream</artifactId>
+    <groupId>io.zenwave360.sdk</groupId>
+    <artifactId>spring-modulith-events-scs</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>ZenWave Spring-Modulith events externalizer for Spring Cloud Stream</description>
-    <url>https://github.com/ZenWave360/zenwave-spring-modulith-events-spring-cloud-stream/</url>
+    <url>https://github.com/ZenWave360/spring-modulith-events-scs/</url>
 
     <licenses>
         <license>
@@ -37,21 +37,20 @@
 
     <distributionManagement>
         <repository>
-            <id>ossrh</id>
-            <name>Central Repository OSSRH</name>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo1.maven.org/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>ossrh</id>
-            <name>Central Repository OSSRH</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+            <id>zenwave-maven-snapshots</id>
+            <url>https://raw.githubusercontent.com/ZenWave360/maven-snapshots/refs/heads/main</url>
         </snapshotRepository>
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git://github.com/ZenWave360/zenwave-spring-modulith-events-spring-cloud-stream.git</connection>
+        <connection>scm:git:git://github.com/ZenWave360/spring-modulith-events-scs.git</connection>
         <developerConnection>scm:git:git@github.com:ZenWave360/ZenWave360.git</developerConnection>
-        <url>https://github.com/ZenWave360/zenwave-spring-modulith-events-spring-cloud-stream/</url>
+        <url>https://github.com/ZenWave360/spring-modulith-events-scs/</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -155,6 +154,30 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.6.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <tokenAuth>true</tokenAuth>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
