@@ -6,6 +6,8 @@ logging:
   level:
     root: WARN
     io.zenwave360: DEBUG
+    org.springframework.jdbc: DEBUG
+    org.springframework.modulith: TRACE
 
 spring:
   datasource:
@@ -21,8 +23,6 @@ spring:
       platform: h2
 
   cloud:
-    function:
-      definition: customers-json;customers-avro
     stream:
       bindings:
         customers-json-out-0:

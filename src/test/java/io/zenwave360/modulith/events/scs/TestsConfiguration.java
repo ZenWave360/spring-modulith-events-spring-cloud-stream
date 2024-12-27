@@ -1,6 +1,7 @@
 package io.zenwave360.modulith.events.scs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.zenwave360.modulith.events.scs.config.SpringCloudStreamEventExternalizerConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
