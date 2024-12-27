@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs,SpringCloudStreamEventExternalizerConfiguration,8,66,2,4,1,12,3,7,1,6
+io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs,MessageEventSerializerConfiguration.new EventSerializer() {...},139,0,6,0,26,0,7,0,4,0
+io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs,SpringCloudStreamEventExternalizer,126,38,16,0,25,9,11,2,3,2
+io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs,MessageEventSerializerConfiguration,10,0,0,0,2,0,2,0,2,0
+io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs,AvroEventSerializerConfiguration,0,15,0,0,0,3,0,2,0,2
+io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs,AvroEventSerializerConfiguration.new EventSerializer() {...},86,72,8,2,18,12,7,3,2,3
