@@ -4,6 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({AvroEventSerializerConfiguration.class, MessageEventSerializerConfiguration.class, SpringCloudStreamEventExternalizerConfiguration.class})
+@Import({SpringCloudStreamEventExternalizerConfiguration.class, MessageEventSerializerConfiguration.class, AvroEventSerializerConfiguration.class})
 public @interface EnableSpringCloudStreamEventExternalization {
 }
