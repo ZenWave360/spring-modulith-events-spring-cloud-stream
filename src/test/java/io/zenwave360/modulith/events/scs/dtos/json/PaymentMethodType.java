@@ -9,13 +9,14 @@ import java.util.Map;
 
 public enum PaymentMethodType {
 
-    VISA("VISA"),
-    MASTERCARD("MASTERCARD");
+    VISA("VISA"), MASTERCARD("MASTERCARD");
+
     private final String value;
+
     private final static Map<String, PaymentMethodType> CONSTANTS = new HashMap<String, PaymentMethodType>();
 
     static {
-        for (PaymentMethodType c: values()) {
+        for (PaymentMethodType c : values()) {
             CONSTANTS.put(c.value, c);
         }
     }
@@ -39,7 +40,8 @@ public enum PaymentMethodType {
         PaymentMethodType constant = CONSTANTS.get(value);
         if (constant == null) {
             throw new IllegalArgumentException(value);
-        } else {
+        }
+        else {
             return constant;
         }
     }

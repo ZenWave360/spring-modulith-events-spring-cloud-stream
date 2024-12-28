@@ -13,6 +13,7 @@ import org.springframework.modulith.events.core.EventSerializer;
 public class MessageEventSerializerTest {
 
     private ObjectMapper objectMapper;
+
     private EventSerializer eventSerializer;
 
     @BeforeEach
@@ -24,16 +25,14 @@ public class MessageEventSerializerTest {
     @Test
     public void testSerializeMessage() {
         var customerEvent = new CustomerEvent().withName("John Doe");
-        Message<?> message = MessageBuilder
-                .withPayload(customerEvent)
-                .setHeader("headerKey", "headerValue")
-                .build();
+        Message<?> message = MessageBuilder.withPayload(customerEvent).setHeader("headerKey", "headerValue").build();
 
         Object serialized = eventSerializer.serialize(message);
 
         Assertions.assertTrue(serialized instanceof String);
         Assertions.assertTrue(serialized.toString().contains("\"payload\":{\"name\":\"John Doe\","));
-        Assertions.assertTrue(serialized.toString().contains("\"_class\":\"io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent\""));
+        Assertions.assertTrue(serialized.toString()
+            .contains("\"_class\":\"io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent\""));
     }
 
     @Test
@@ -73,10 +72,7 @@ public class MessageEventSerializerTest {
     @Test
     public void testSerializeDeserializeMessage() throws JsonProcessingException, ClassNotFoundException {
         var customerEvent = new CustomerEvent().withName("John Doe");
-        Message<?> message = MessageBuilder
-                .withPayload(customerEvent)
-                .setHeader("headerKey", "headerValue")
-                .build();
+        Message<?> message = MessageBuilder.withPayload(customerEvent).setHeader("headerKey", "headerValue").build();
 
         Object serialized = eventSerializer.serialize(message);
         Message<?> deserialized = eventSerializer.deserialize(serialized, Message.class);
@@ -93,4 +89,5 @@ public class MessageEventSerializerTest {
 
         Assertions.assertEquals(CustomerEvent.class, deserialized.getClass());
     }
+
 }

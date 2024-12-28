@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MessageEventSerializer implements EventSerializer {
+
     private final ObjectMapper jacksonMapper;
 
     public MessageEventSerializer(ObjectMapper jacksonMapper) {
@@ -45,12 +46,14 @@ public class MessageEventSerializer implements EventSerializer {
     public <T> T deserialize(Object serialized, Class<T> type) {
         try {
             return unsafeDeserialize(serialized, type);
-        } catch (JsonProcessingException | ClassNotFoundException e) {
+        }
+        catch (JsonProcessingException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private <T> T unsafeDeserialize(Object serialized, Class<T> type) throws JsonProcessingException, ClassNotFoundException {
+    private <T> T unsafeDeserialize(Object serialized, Class<T> type)
+            throws JsonProcessingException, ClassNotFoundException {
         if (Message.class.isAssignableFrom(type)) {
             JsonNode node = jacksonMapper.readTree(serialized.toString());
             JsonNode headersNode = node.get("headers");
@@ -63,7 +66,8 @@ public class MessageEventSerializer implements EventSerializer {
                     objectNode.remove("_class");
                 }
                 payload = deserializePayload(payloadNode, payloadType);
-            } else {
+            }
+            else {
                 payload = deserializePayload(payloadNode, Object.class);
             }
             return (T) MessageBuilder.createMessage(payload, new MessageHeaders(headers));
@@ -79,7 +83,8 @@ public class MessageEventSerializer implements EventSerializer {
         try {
             var map = serializeToMap(event);
             return jacksonMapper.writeValueAsString(map);
-        } catch (JsonProcessingException e) {
+        }
+        catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
@@ -88,8 +93,10 @@ public class MessageEventSerializer implements EventSerializer {
         try {
             JsonNode node = jacksonMapper.readTree(serialized.toString());
             return (T) jacksonMapper.readerFor(type).readValue(node);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 }

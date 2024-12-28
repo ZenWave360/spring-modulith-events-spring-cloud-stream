@@ -28,4 +28,5 @@ public class SCSAvroEventExternalizerTest {
         Thread.sleep(5000);
         // TODO: Assert that the event was externalized
     }
+
 }
