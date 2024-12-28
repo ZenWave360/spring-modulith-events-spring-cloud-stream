@@ -22,7 +22,7 @@ Add the following Maven dependency to your project:
 ```
 
 ### Configuration
-Enable Spring Cloud Stream event externalization by adding the `@EnableSpringCloudStreamEventExternalization` annotation to your Spring configuration:
+User `@EnableSpringCloudStreamEventExternalization` annotation to enable Spring Cloud Stream event externalization in your Spring configuration:
 
 ```java
 @Configuration
@@ -38,19 +38,27 @@ This configuration ensures that all events of type `org.springframework.messagin
 
 ## Event Serialization
 
-Using the transactional event publication log requires serializing events to a format that can be stored in a database. This library provides support for JSON and Avro serialization formats of `Message<?>` payloads.
+This library provides support for JSON and Avro serialization formats of `Message<?>` payloads.
 
-### JSON Serialization
-Provides an `EventSerializer` that serializes `Message<?>` payloads into JSON format suitable for data storage adding a `_class` field to indicate the class type of the payload (needed for deserialization).
+Using the transactional event publication log requires serializing events to a format that can be stored in a database. Because `Message<?>` payload generic type is lost when using the default `JacksonEventSerializer` this library adds an extra `_class` field to preserve payload type information allowing for complete deserialization.
 
 ### Avro Serialization
-If `com.fasterxml.jackson.dataformat.avro.AvroMapper` is present in the classpath, the serializer automatically supports Avro serialization/deserialization.
+
+Avro serialization needs `com.fasterxml.jackson.dataformat.avro.AvroMapper` class present in the classpath. In order to use Avro serialization, you need to add the following dependency to your project:
+
+```xml
+<dependency>
+    <groupId>com.fasterxml.jackson.dataformat</groupId>
+    <artifactId>jackson-dataformat-avro</artifactId>
+</dependency>
+```
 
 ---
 
 ## Routing Events
 
-### Programmatic Routing
+### Programmatic Routing for `Message<?`> events
+
 You can define routing targets programmatically using a Message header:
 
 ```java
@@ -69,7 +77,8 @@ public class CustomerEventsProducer implements ICustomerEventsProducer {
 }
 ```
 
-### Annotation-Based Routing
+### Annotation-Based Routing for POJO Events
+
 Leverage the `@Externalized` annotation to define the target binding name and routing key:
 
 ```java
@@ -82,7 +91,7 @@ class CustomerCreated {
 }
 ```
 
-Configure the routing in `application.yml`:
+Configure Spring Cloud Stream destination for your bindings as usual in `application.yml`:
 
 ```yaml
 spring:
@@ -93,7 +102,17 @@ spring:
           destination: customer-created
 ```
 
-`SpringCloudStreamEventExternalizer` dynamically sets the appropriate routing key (e.g., `kafka_messageKey` or `rabbit_routingKey`) based on the channel binder.
+### Routing Key
+
+`SpringCloudStreamEventExternalizer` dynamically sets the appropriate routing key (e.g., `kafka_messageKey` or `rabbit_routingKey`) based on the channel binder type.
+
+- KafkaMessageChannelBinder: `kafka_messageKey`
+- RabbitMessageChannelBinder: `rabbit_routingKey`
+- KinesisMessageChannelBinder: `partitionKey`
+- PubSubMessageChannelBinder: `pubsub_orderingKey`
+- EventHubsMessageChannelBinder: `partitionKey`
+- SolaceMessageChannelBinder: `solace_messageKey`
+- PulsarMessageChannelBinder: `pulsar_key`
 
 ---
 
