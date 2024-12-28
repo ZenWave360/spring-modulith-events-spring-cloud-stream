@@ -38,9 +38,9 @@ This configuration ensures that all events of type `org.springframework.messagin
 
 ## Event Serialization
 
-This library provides support for POJO(JSON) and Avro serialization formats and of `Message<?>` payloads.
-
 Using the transactional event publication log requires serializing events to a format that can be stored in a database. Because `Message<?>` payload generic type is lost when using the default `JacksonEventSerializer` this library adds an extra `_class` field to preserve payload type information allowing for complete deserialization to its original type.
+
+This library provides support for POJO(JSON) and Avro serialization formats and of `Message<?>` payloads.
 
 ### Avro Serialization
 
