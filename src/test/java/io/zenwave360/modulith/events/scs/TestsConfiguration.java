@@ -12,6 +12,8 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @EnableAutoConfiguration
 @Import({ SpringCloudStreamEventExternalizerConfiguration.class })
@@ -42,6 +44,7 @@ public class TestsConfiguration {
             this.applicationEventPublisher = applicationEventPublisher;
         }
 
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
         public void onCustomerEventJson(io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent event) {
             Message<io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent> message = MessageBuilder.withPayload(event)
                     .setHeader(
@@ -51,6 +54,7 @@ public class TestsConfiguration {
             applicationEventPublisher.publishEvent(message);
         }
 
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
         public void onCustomerEventAvro(io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent event) {
             Message<io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent> message = MessageBuilder.withPayload(event)
                     .setHeader(

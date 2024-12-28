@@ -20,9 +20,12 @@ public class SCSAvroEventExternalizerTest {
     JdbcTemplate jdbcTemplate;
 
     @Test
-    void testExternalizeAvroEvent() {
+    void testExternalizeAvroEvent() throws InterruptedException {
         var event = new io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent();
         event.setName("John Doe");
         customerEventsProducer.onCustomerEventAvro(event);
+        // Wait for the event to be externalized
+        Thread.sleep(5000);
+        // TODO: Assert that the event was externalized
     }
 }
