@@ -1,12 +1,8 @@
 package io.zenwave360.modulith.events.scs;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.avro.AvroMapper;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.specific.SpecificRecord;
 import org.springframework.modulith.events.core.EventSerializer;
 
 import java.util.Map;
@@ -30,4 +26,5 @@ public class AvroEventSerializer extends MessageEventSerializer implements Event
         objectNode.remove("specificData"); // TODO: remove this recursively
         return avroMapper.convertValue(objectNode, Map.class);
     }
+
 }

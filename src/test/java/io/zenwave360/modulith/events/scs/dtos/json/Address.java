@@ -11,12 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "street",
-    "city"
-})
-public class Address implements Serializable
-{
+@JsonPropertyOrder({ "street", "city" })
+public class Address implements Serializable {
 
     /**
      * 
@@ -27,6 +23,7 @@ public class Address implements Serializable
     @Size(max = 254)
     @NotNull
     private String street;
+
     /**
      * 
      * (Required)
@@ -36,10 +33,13 @@ public class Address implements Serializable
     @Size(max = 254)
     @NotNull
     private String city;
+
     @JsonIgnore
     @Valid
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
+
     protected final static Object NOT_FOUND_VALUE = new Object();
+
     private final static long serialVersionUID = -2054487487628445756L;
 
     /**
@@ -111,19 +111,25 @@ public class Address implements Serializable
         if ("street".equals(name)) {
             if (value instanceof String) {
                 setStreet(((String) value));
-            } else {
-                throw new IllegalArgumentException(("property \"street\" is of type \"java.lang.String\", but got "+ value.getClass().toString()));
+            }
+            else {
+                throw new IllegalArgumentException(("property \"street\" is of type \"java.lang.String\", but got "
+                        + value.getClass().toString()));
             }
             return true;
-        } else {
+        }
+        else {
             if ("city".equals(name)) {
                 if (value instanceof String) {
                     setCity(((String) value));
-                } else {
-                    throw new IllegalArgumentException(("property \"city\" is of type \"java.lang.String\", but got "+ value.getClass().toString()));
+                }
+                else {
+                    throw new IllegalArgumentException(("property \"city\" is of type \"java.lang.String\", but got "
+                            + value.getClass().toString()));
                 }
                 return true;
-            } else {
+            }
+            else {
                 return false;
             }
         }
@@ -132,23 +138,24 @@ public class Address implements Serializable
     protected Object declaredPropertyOrNotFound(String name, Object notFoundValue) {
         if ("street".equals(name)) {
             return getStreet();
-        } else {
+        }
+        else {
             if ("city".equals(name)) {
                 return getCity();
-            } else {
+            }
+            else {
                 return notFoundValue;
             }
         }
     }
 
-    @SuppressWarnings({
-        "unchecked"
-    })
-    public<T >T get(String name) {
+    @SuppressWarnings({ "unchecked" })
+    public <T> T get(String name) {
         Object value = declaredPropertyOrNotFound(name, Address.NOT_FOUND_VALUE);
-        if (Address.NOT_FOUND_VALUE!= value) {
+        if (Address.NOT_FOUND_VALUE != value) {
             return ((T) value);
-        } else {
+        }
+        else {
             return ((T) getAdditionalProperties().get(name));
         }
     }
@@ -169,22 +176,26 @@ public class Address implements Serializable
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(Address.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append(Address.class.getName())
+            .append('@')
+            .append(Integer.toHexString(System.identityHashCode(this)))
+            .append('[');
         sb.append("street");
         sb.append('=');
-        sb.append(((this.street == null)?"<null>":this.street));
+        sb.append(((this.street == null) ? "<null>" : this.street));
         sb.append(',');
         sb.append("city");
         sb.append('=');
-        sb.append(((this.city == null)?"<null>":this.city));
+        sb.append(((this.city == null) ? "<null>" : this.city));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
+        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length()- 1)) == ',') {
-            sb.setCharAt((sb.length()- 1), ']');
-        } else {
+        if (sb.charAt((sb.length() - 1)) == ',') {
+            sb.setCharAt((sb.length() - 1), ']');
+        }
+        else {
             sb.append(']');
         }
         return sb.toString();
@@ -193,9 +204,9 @@ public class Address implements Serializable
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
-        result = ((result* 31)+((this.city == null)? 0 :this.city.hashCode()));
-        result = ((result* 31)+((this.street == null)? 0 :this.street.hashCode()));
+        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
+        result = ((result * 31) + ((this.city == null) ? 0 : this.city.hashCode()));
+        result = ((result * 31) + ((this.street == null) ? 0 : this.street.hashCode()));
         return result;
     }
 
@@ -208,7 +219,10 @@ public class Address implements Serializable
             return false;
         }
         Address rhs = ((Address) other);
-        return ((((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties)))&&((this.city == rhs.city)||((this.city!= null)&&this.city.equals(rhs.city))))&&((this.street == rhs.street)||((this.street!= null)&&this.street.equals(rhs.street))));
+        return ((((this.additionalProperties == rhs.additionalProperties)
+                || ((this.additionalProperties != null) && this.additionalProperties.equals(rhs.additionalProperties)))
+                && ((this.city == rhs.city) || ((this.city != null) && this.city.equals(rhs.city))))
+                && ((this.street == rhs.street) || ((this.street != null) && this.street.equals(rhs.street))));
     }
 
 }

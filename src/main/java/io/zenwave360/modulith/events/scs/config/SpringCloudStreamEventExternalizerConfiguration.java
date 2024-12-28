@@ -36,7 +36,8 @@ import org.springframework.modulith.events.config.EventExternalizationAutoConfig
 import org.springframework.modulith.events.support.DelegatingEventExternalizer;
 
 /**
- * Auto-configuration to set up a {@link DelegatingEventExternalizer} to externalize events to Spring Cloud Stream.
+ * Auto-configuration to set up a {@link DelegatingEventExternalizer} to externalize
+ * events to Spring Cloud Stream.
  *
  * @author ivangsa
  * @since 1.3
@@ -45,39 +46,39 @@ import org.springframework.modulith.events.support.DelegatingEventExternalizer;
 @AutoConfiguration
 @AutoConfigureAfter(EventExternalizationAutoConfiguration.class)
 @ConditionalOnClass(StreamBridge.class)
-@ConditionalOnProperty(name = "spring.modulith.events.externalization.enabled",
-		havingValue = "true",
-		matchIfMissing = true)
+@ConditionalOnProperty(name = "spring.modulith.events.externalization.enabled", havingValue = "true",
+        matchIfMissing = true)
 public class SpringCloudStreamEventExternalizerConfiguration {
 
-	private static final Logger log = LoggerFactory.getLogger(SpringCloudStreamEventExternalizerConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(SpringCloudStreamEventExternalizerConfiguration.class);
 
-	@Bean
-	EventExternalizationConfiguration eventExternalizationConfiguration() {
-		return EventExternalizationConfiguration.externalizing()
-				.select(event -> event instanceof Message<?> && getTarget(event) != null)
-				.routeAll(event -> RoutingTarget.forTarget(getTarget(event)).withoutKey())
-				.build();
-	}
+    @Bean
+    EventExternalizationConfiguration eventExternalizationConfiguration() {
+        return EventExternalizationConfiguration.externalizing()
+            .select(event -> event instanceof Message<?> && getTarget(event) != null)
+            .routeAll(event -> RoutingTarget.forTarget(getTarget(event)).withoutKey())
+            .build();
+    }
 
-	private String getTarget(Object event) {
-		if(event instanceof Message<?> message) {
-			return message.getHeaders().get(SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER, String.class);
-		}
-		return null;
-	}
+    private String getTarget(Object event) {
+        if (event instanceof Message<?> message) {
+            return message.getHeaders()
+                .get(SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER, String.class);
+        }
+        return null;
+    }
 
-	@Bean
-	DelegatingEventExternalizer springCloudStreamMessageExternalizer(
-			EventExternalizationConfiguration configuration,
-			StreamBridge streamBridge, BeanFactory factory,
-			BindingServiceProperties bindingServiceProperties,
-			BinderFactory binderFactory) {
-		log.debug("Registering domain event externalization to Spring Cloud Stream…");
+    @Bean
+    DelegatingEventExternalizer springCloudStreamMessageExternalizer(EventExternalizationConfiguration configuration,
+            StreamBridge streamBridge, BeanFactory factory, BindingServiceProperties bindingServiceProperties,
+            BinderFactory binderFactory) {
+        log.debug("Registering domain event externalization to Spring Cloud Stream…");
 
-		var context = new StandardEvaluationContext();
-		context.setBeanResolver(new BeanFactoryResolver(factory));
+        var context = new StandardEvaluationContext();
+        context.setBeanResolver(new BeanFactoryResolver(factory));
 
-		return new DelegatingEventExternalizer(configuration, new SpringCloudStreamEventExternalizer(configuration, context, streamBridge, bindingServiceProperties, binderFactory));
-	}
+        return new DelegatingEventExternalizer(configuration, new SpringCloudStreamEventExternalizer(configuration,
+                context, streamBridge, bindingServiceProperties, binderFactory));
+    }
+
 }

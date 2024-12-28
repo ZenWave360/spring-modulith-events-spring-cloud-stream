@@ -12,7 +12,6 @@ import org.springframework.modulith.events.core.EventSerializer;
 
 public class AvroEventSerializerTest {
 
-
     private EventSerializer eventSerializer;
 
     @BeforeEach
@@ -24,16 +23,14 @@ public class AvroEventSerializerTest {
     public void testSerializeMessage() {
         var customerEvent = new CustomerEvent();
         customerEvent.setName("John Doe");
-        Message<?> message = MessageBuilder
-                .withPayload(customerEvent)
-                .setHeader("headerKey", "headerValue")
-                .build();
+        Message<?> message = MessageBuilder.withPayload(customerEvent).setHeader("headerKey", "headerValue").build();
 
         Object serialized = eventSerializer.serialize(message);
 
         Assertions.assertTrue(serialized instanceof String);
         Assertions.assertTrue(serialized.toString().contains("\"name\":\"John Doe\","));
-        Assertions.assertTrue(serialized.toString().contains("\"_class\":\"io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent\""));
+        Assertions.assertTrue(serialized.toString()
+            .contains("\"_class\":\"io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent\""));
     }
 
     @Test
@@ -74,10 +71,7 @@ public class AvroEventSerializerTest {
     public void testSerializeDeserializeMessage() throws JsonProcessingException, ClassNotFoundException {
         var customerEvent = new CustomerEvent();
         customerEvent.setName("John Doe");
-        Message<?> message = MessageBuilder
-                .withPayload(customerEvent)
-                .setHeader("headerKey", "headerValue")
-                .build();
+        Message<?> message = MessageBuilder.withPayload(customerEvent).setHeader("headerKey", "headerValue").build();
 
         Object serialized = eventSerializer.serialize(message);
         Message<?> deserialized = eventSerializer.deserialize(serialized, Message.class);
@@ -96,4 +90,5 @@ public class AvroEventSerializerTest {
         Assertions.assertEquals(CustomerEvent.class, deserialized.getClass());
         Assertions.assertEquals(customerEvent.getName(), ((CustomerEvent) deserialized).getName());
     }
+
 }

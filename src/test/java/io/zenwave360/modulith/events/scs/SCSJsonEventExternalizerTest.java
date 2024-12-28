@@ -21,11 +21,11 @@ public class SCSJsonEventExternalizerTest {
 
     @Test
     void testExternalizeJsonEvent() throws InterruptedException {
-        var event = new io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent()
-                .withName("John Doe");
+        var event = new io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent().withName("John Doe");
         customerEventsProducer.onCustomerEventJson(event);
         // Wait for the event to be externalized
         Thread.sleep(5000);
         // TODO: Assert that the event was externalized
     }
+
 }

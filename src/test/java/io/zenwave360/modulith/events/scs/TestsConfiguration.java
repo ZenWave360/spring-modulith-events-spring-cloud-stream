@@ -46,22 +46,24 @@ public class TestsConfiguration {
 
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public void onCustomerEventJson(io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent event) {
-            Message<io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent> message = MessageBuilder.withPayload(event)
-                    .setHeader(
-                            SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER,
-                            "customers-json-out-0") // <- target binding name
-                    .build();
+            Message<io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent> message = MessageBuilder
+                .withPayload(event)
+                .setHeader(SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER,
+                        "customers-json-out-0") // <- target binding name
+                .build();
             applicationEventPublisher.publishEvent(message);
         }
 
         @Transactional(propagation = Propagation.REQUIRES_NEW)
         public void onCustomerEventAvro(io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent event) {
-            Message<io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent> message = MessageBuilder.withPayload(event)
-                    .setHeader(
-                            SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER,
-                            "customers-avro-out-0") // <- target binding name
-                    .build();
+            Message<io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent> message = MessageBuilder
+                .withPayload(event)
+                .setHeader(SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER,
+                        "customers-avro-out-0") // <- target binding name
+                .build();
             applicationEventPublisher.publishEvent(message);
         }
+
     }
+
 }

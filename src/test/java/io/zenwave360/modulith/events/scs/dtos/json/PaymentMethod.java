@@ -10,16 +10,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "id",
-    "type",
-    "cardNumber"
-})
-public class PaymentMethod implements Serializable
-{
+@JsonPropertyOrder({ "id", "type", "cardNumber" })
+public class PaymentMethod implements Serializable {
 
     @JsonProperty("id")
     private Long id;
+
     /**
      * 
      * (Required)
@@ -28,6 +24,7 @@ public class PaymentMethod implements Serializable
     @JsonProperty("type")
     @NotNull
     private PaymentMethodType type;
+
     /**
      * 
      * (Required)
@@ -36,10 +33,13 @@ public class PaymentMethod implements Serializable
     @JsonProperty("cardNumber")
     @NotNull
     private String cardNumber;
+
     @JsonIgnore
     @Valid
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
+
     protected final static Object NOT_FOUND_VALUE = new Object();
+
     private final static long serialVersionUID = -8629217294484723648L;
 
     @JsonProperty("id")
@@ -126,27 +126,38 @@ public class PaymentMethod implements Serializable
         if ("id".equals(name)) {
             if (value instanceof Long) {
                 setId(((Long) value));
-            } else {
-                throw new IllegalArgumentException(("property \"id\" is of type \"java.lang.Long\", but got "+ value.getClass().toString()));
+            }
+            else {
+                throw new IllegalArgumentException(
+                        ("property \"id\" is of type \"java.lang.Long\", but got " + value.getClass().toString()));
             }
             return true;
-        } else {
+        }
+        else {
             if ("type".equals(name)) {
                 if (value instanceof PaymentMethodType) {
                     setType(((PaymentMethodType) value));
-                } else {
-                    throw new IllegalArgumentException(("property \"type\" is of type \"io.zenwave360.example.core.outbound.events.dtos.PaymentMethodType\", but got "+ value.getClass().toString()));
+                }
+                else {
+                    throw new IllegalArgumentException(
+                            ("property \"type\" is of type \"io.zenwave360.example.core.outbound.events.dtos.PaymentMethodType\", but got "
+                                    + value.getClass().toString()));
                 }
                 return true;
-            } else {
+            }
+            else {
                 if ("cardNumber".equals(name)) {
                     if (value instanceof String) {
                         setCardNumber(((String) value));
-                    } else {
-                        throw new IllegalArgumentException(("property \"cardNumber\" is of type \"java.lang.String\", but got "+ value.getClass().toString()));
+                    }
+                    else {
+                        throw new IllegalArgumentException(
+                                ("property \"cardNumber\" is of type \"java.lang.String\", but got "
+                                        + value.getClass().toString()));
                     }
                     return true;
-                } else {
+                }
+                else {
                     return false;
                 }
             }
@@ -156,27 +167,29 @@ public class PaymentMethod implements Serializable
     protected Object declaredPropertyOrNotFound(String name, Object notFoundValue) {
         if ("id".equals(name)) {
             return getId();
-        } else {
+        }
+        else {
             if ("type".equals(name)) {
                 return getType();
-            } else {
+            }
+            else {
                 if ("cardNumber".equals(name)) {
                     return getCardNumber();
-                } else {
+                }
+                else {
                     return notFoundValue;
                 }
             }
         }
     }
 
-    @SuppressWarnings({
-        "unchecked"
-    })
-    public<T >T get(String name) {
+    @SuppressWarnings({ "unchecked" })
+    public <T> T get(String name) {
         Object value = declaredPropertyOrNotFound(name, PaymentMethod.NOT_FOUND_VALUE);
-        if (PaymentMethod.NOT_FOUND_VALUE!= value) {
+        if (PaymentMethod.NOT_FOUND_VALUE != value) {
             return ((T) value);
-        } else {
+        }
+        else {
             return ((T) getAdditionalProperties().get(name));
         }
     }
@@ -197,26 +210,30 @@ public class PaymentMethod implements Serializable
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(PaymentMethod.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append(PaymentMethod.class.getName())
+            .append('@')
+            .append(Integer.toHexString(System.identityHashCode(this)))
+            .append('[');
         sb.append("id");
         sb.append('=');
-        sb.append(((this.id == null)?"<null>":this.id));
+        sb.append(((this.id == null) ? "<null>" : this.id));
         sb.append(',');
         sb.append("type");
         sb.append('=');
-        sb.append(((this.type == null)?"<null>":this.type));
+        sb.append(((this.type == null) ? "<null>" : this.type));
         sb.append(',');
         sb.append("cardNumber");
         sb.append('=');
-        sb.append(((this.cardNumber == null)?"<null>":this.cardNumber));
+        sb.append(((this.cardNumber == null) ? "<null>" : this.cardNumber));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
-        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
+        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
         sb.append(',');
-        if (sb.charAt((sb.length()- 1)) == ',') {
-            sb.setCharAt((sb.length()- 1), ']');
-        } else {
+        if (sb.charAt((sb.length() - 1)) == ',') {
+            sb.setCharAt((sb.length() - 1), ']');
+        }
+        else {
             sb.append(']');
         }
         return sb.toString();
@@ -225,10 +242,10 @@ public class PaymentMethod implements Serializable
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result* 31)+((this.id == null)? 0 :this.id.hashCode()));
-        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
-        result = ((result* 31)+((this.type == null)? 0 :this.type.hashCode()));
-        result = ((result* 31)+((this.cardNumber == null)? 0 :this.cardNumber.hashCode()));
+        result = ((result * 31) + ((this.id == null) ? 0 : this.id.hashCode()));
+        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
+        result = ((result * 31) + ((this.type == null) ? 0 : this.type.hashCode()));
+        result = ((result * 31) + ((this.cardNumber == null) ? 0 : this.cardNumber.hashCode()));
         return result;
     }
 
@@ -241,7 +258,12 @@ public class PaymentMethod implements Serializable
             return false;
         }
         PaymentMethod rhs = ((PaymentMethod) other);
-        return (((((this.id == rhs.id)||((this.id!= null)&&this.id.equals(rhs.id)))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.type == rhs.type)||((this.type!= null)&&this.type.equals(rhs.type))))&&((this.cardNumber == rhs.cardNumber)||((this.cardNumber!= null)&&this.cardNumber.equals(rhs.cardNumber))));
+        return (((((this.id == rhs.id) || ((this.id != null) && this.id.equals(rhs.id)))
+                && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null)
+                        && this.additionalProperties.equals(rhs.additionalProperties))))
+                && ((this.type == rhs.type) || ((this.type != null) && this.type.equals(rhs.type))))
+                && ((this.cardNumber == rhs.cardNumber)
+                        || ((this.cardNumber != null) && this.cardNumber.equals(rhs.cardNumber))));
     }
 
 }

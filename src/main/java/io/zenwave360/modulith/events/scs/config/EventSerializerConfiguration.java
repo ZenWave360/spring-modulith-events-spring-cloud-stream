@@ -16,8 +16,7 @@ import org.springframework.modulith.events.core.EventSerializer;
 
 @AutoConfiguration
 @AutoConfigureAfter(EventExternalizationAutoConfiguration.class)
-@ConditionalOnProperty(name = "spring.modulith.events.externalization.enabled",
-        havingValue = "true",
+@ConditionalOnProperty(name = "spring.modulith.events.externalization.enabled", havingValue = "true",
         matchIfMissing = true)
 public class EventSerializerConfiguration {
 
@@ -34,4 +33,5 @@ public class EventSerializerConfiguration {
     public EventSerializer messageEventSerializer(ObjectMapper mapper) {
         return new MessageEventSerializer(mapper);
     }
+
 }
