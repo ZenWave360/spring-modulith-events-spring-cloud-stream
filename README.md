@@ -22,7 +22,7 @@ Add the following Maven dependency to your project:
 ```
 
 ### Configuration
-User `@EnableSpringCloudStreamEventExternalization` annotation to enable Spring Cloud Stream event externalization in your Spring configuration:
+Use `@EnableSpringCloudStreamEventExternalization` annotation to enable Spring Cloud Stream event externalization in your Spring configuration:
 
 ```java
 @Configuration
@@ -32,15 +32,15 @@ public class SpringCloudStreamEventsConfig {
 }
 ```
 
-This configuration ensures that all events of type `org.springframework.messaging.Message` with the header `SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_EVENT_HEADER` will be externalized and routed to their specified destination.
+This configuration ensures that all events of type `org.springframework.messaging.Message` with the header `SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_EVENT_HEADER`, on top of events annotated with `@Externalized`, will be externalized and routed to their specified destination.
 
 ---
 
 ## Event Serialization
 
-This library provides support for JSON and Avro serialization formats of `Message<?>` payloads.
+This library provides support for POJO(JSON) and Avro serialization formats and of `Message<?>` payloads.
 
-Using the transactional event publication log requires serializing events to a format that can be stored in a database. Because `Message<?>` payload generic type is lost when using the default `JacksonEventSerializer` this library adds an extra `_class` field to preserve payload type information allowing for complete deserialization.
+Using the transactional event publication log requires serializing events to a format that can be stored in a database. Because `Message<?>` payload generic type is lost when using the default `JacksonEventSerializer` this library adds an extra `_class` field to preserve payload type information allowing for complete deserialization to its original type.
 
 ### Avro Serialization
 
@@ -104,7 +104,7 @@ spring:
 
 ### Routing Key
 
-`SpringCloudStreamEventExternalizer` dynamically sets the appropriate routing key (e.g., `kafka_messageKey` or `rabbit_routingKey`) based on the channel binder type.
+`SpringCloudStreamEventExternalizer` dynamically sets the appropriate Message header from your routing key (e.g., `kafka_messageKey` or `rabbit_routingKey`) based on the channel binder type, only in case routing header is not present.
 
 - KafkaMessageChannelBinder: `kafka_messageKey`
 - RabbitMessageChannelBinder: `rabbit_routingKey`
@@ -117,7 +117,7 @@ spring:
 ---
 
 ## Using Snapshot Versions
-To include snapshot versions, add the following repository to your Maven configuration:
+In order to test snapshot versions of this library, add the following repository to your Maven configuration:
 
 ```xml
 <repository>
