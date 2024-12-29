@@ -32,15 +32,15 @@ public class SpringCloudStreamEventsConfig {
 }
 ```
 
-This configuration ensures that all events of type `org.springframework.messaging.Message` with the header `SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_EVENT_HEADER`, on top of events annotated with `@Externalized`, will be externalized and routed to their specified destination.
+This configuration ensures that, in addition to events annotated with `@Externalized`, all events of type `org.springframework.messaging.Message` with a header named `SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_EVENT_HEADER` will be externalized and routed to their specified destination using the value of this header as the routing target.
 
 ---
 
 ## Event Serialization
 
-Using the transactional event publication log requires serializing events to a format that can be stored in a database. Because `Message<?>` payload generic type is lost when using the default `JacksonEventSerializer` this library adds an extra `_class` field to preserve payload type information allowing for complete deserialization to its original type.
+Using the transactional event publication log requires serializing events to a format that can be stored in a database. Since the generic type of `Message<?>` payload is lost when using the default `JacksonEventSerializer`, this library adds an extra `_class` field to preserve payload type information, allowing for complete deserialization to its original type.
 
-This library provides support for POJO(JSON) and Avro serialization formats and of `Message<?>` payloads.
+This library provides support for POJO (JSON) and Avro serialization formats for `Message<?>` payloads.
 
 ### Avro Serialization
 
@@ -91,6 +91,8 @@ class CustomerCreated {
 }
 ```
 
+### Configure Spring Cloud Stream destination
+
 Configure Spring Cloud Stream destination for your bindings as usual in `application.yml`:
 
 ```yaml
@@ -99,12 +101,12 @@ spring:
     stream:
       bindings:
         customer-created:
-          destination: customer-created
+          destination: customer-created-topic
 ```
 
 ### Routing Key
 
-`SpringCloudStreamEventExternalizer` dynamically sets the appropriate Message header from your routing key (e.g., `kafka_messageKey` or `rabbit_routingKey`) based on the channel binder type, only in case routing header is not present.
+`SpringCloudStreamEventExternalizer` dynamically sets the appropriate Message header (e.g., `kafka_messageKey` or `rabbit_routingKey`) from your routing key based on the channel binder type, if the routing header is not already present.
 
 - KafkaMessageChannelBinder: `kafka_messageKey`
 - RabbitMessageChannelBinder: `rabbit_routingKey`
