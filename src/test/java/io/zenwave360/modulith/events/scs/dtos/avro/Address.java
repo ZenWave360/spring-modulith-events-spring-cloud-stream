@@ -174,8 +174,8 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase
      * Creates a new Address RecordBuilder.
      * @return A new Address RecordBuilder
      */
-    public static io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder newBuilder() {
-        return new io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder();
+    public static Address.Builder newBuilder() {
+        return new Address.Builder();
     }
 
     /**
@@ -183,13 +183,13 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase
      * @param other The existing builder to copy.
      * @return A new Address RecordBuilder
      */
-    public static io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder newBuilder(
-            io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder other) {
+    public static Address.Builder newBuilder(
+            Address.Builder other) {
         if (other == null) {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder();
+            return new Address.Builder();
         }
         else {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder(other);
+            return new Address.Builder(other);
         }
     }
 
@@ -198,13 +198,13 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase
      * @param other The existing instance to copy.
      * @return A new Address RecordBuilder
      */
-    public static io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder newBuilder(
-            io.zenwave360.modulith.events.scs.dtos.avro.Address other) {
+    public static Address.Builder newBuilder(
+            Address other) {
         if (other == null) {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder();
+            return new Address.Builder();
         }
         else {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder(other);
+            return new Address.Builder(other);
         }
     }
 
@@ -228,7 +228,7 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase
          * Creates a Builder by copying an existing Builder.
          * @param other The existing Builder to copy.
          */
-        private Builder(io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder other) {
+        private Builder(Address.Builder other) {
             super(other);
             if (isValidValue(fields()[0], other.street)) {
                 this.street = data().deepCopy(fields()[0].schema(), other.street);
@@ -244,7 +244,7 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase
          * Creates a Builder by copying an existing Address instance
          * @param other The existing instance to copy.
          */
-        private Builder(io.zenwave360.modulith.events.scs.dtos.avro.Address other) {
+        private Builder(Address other) {
             super(SCHEMA$, MODEL$);
             if (isValidValue(fields()[0], other.street)) {
                 this.street = data().deepCopy(fields()[0].schema(), other.street);
@@ -269,7 +269,7 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'street'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder setStreet(CharSequence value) {
+        public Address.Builder setStreet(CharSequence value) {
             validate(fields()[0], value);
             this.street = value;
             fieldSetFlags()[0] = true;
@@ -288,7 +288,7 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'street' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder clearStreet() {
+        public Address.Builder clearStreet() {
             street = null;
             fieldSetFlags()[0] = false;
             return this;
@@ -307,7 +307,7 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'city'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder setCity(CharSequence value) {
+        public Address.Builder setCity(CharSequence value) {
             validate(fields()[1], value);
             this.city = value;
             fieldSetFlags()[1] = true;
@@ -326,7 +326,7 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'city' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.Address.Builder clearCity() {
+        public Address.Builder clearCity() {
             city = null;
             fieldSetFlags()[1] = false;
             return this;

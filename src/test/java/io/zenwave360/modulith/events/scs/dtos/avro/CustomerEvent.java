@@ -82,13 +82,13 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
 
     private CharSequence email;
 
-    private java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address> addresses;
+    private java.util.List<Address> addresses;
 
     private Long id;
 
     private Integer version;
 
-    private java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> paymentMethods;
+    private java.util.List<PaymentMethod> paymentMethods;
 
     /**
      * Default constructor. Note that this does not initialize fields to their default
@@ -108,8 +108,8 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
      * @param paymentMethods The new value for paymentMethods
      */
     public CustomerEvent(CharSequence name, CharSequence email,
-            java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address> addresses, Long id, Integer version,
-            java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> paymentMethods) {
+            java.util.List<Address> addresses, Long id, Integer version,
+            java.util.List<PaymentMethod> paymentMethods) {
         this.name = name;
         this.email = email;
         this.addresses = addresses;
@@ -161,7 +161,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
                 email = (CharSequence) value$;
                 break;
             case 2:
-                addresses = (java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address>) value$;
+                addresses = (java.util.List<Address>) value$;
                 break;
             case 3:
                 id = (Long) value$;
@@ -170,7 +170,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
                 version = (Integer) value$;
                 break;
             case 5:
-                paymentMethods = (java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod>) value$;
+                paymentMethods = (java.util.List<PaymentMethod>) value$;
                 break;
             default:
                 throw new IndexOutOfBoundsException("Invalid index: " + field$);
@@ -213,7 +213,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
      * Gets the value of the 'addresses' field.
      * @return The value of the 'addresses' field.
      */
-    public java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address> getAddresses() {
+    public java.util.List<Address> getAddresses() {
         return addresses;
     }
 
@@ -221,7 +221,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
      * Sets the value of the 'addresses' field.
      * @param value the value to set.
      */
-    public void setAddresses(java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address> value) {
+    public void setAddresses(java.util.List<Address> value) {
         this.addresses = value;
     }
 
@@ -261,7 +261,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
      * Gets the value of the 'paymentMethods' field.
      * @return The value of the 'paymentMethods' field.
      */
-    public java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> getPaymentMethods() {
+    public java.util.List<PaymentMethod> getPaymentMethods() {
         return paymentMethods;
     }
 
@@ -269,7 +269,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
      * Sets the value of the 'paymentMethods' field.
      * @param value the value to set.
      */
-    public void setPaymentMethods(java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> value) {
+    public void setPaymentMethods(java.util.List<PaymentMethod> value) {
         this.paymentMethods = value;
     }
 
@@ -277,8 +277,8 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
      * Creates a new CustomerEvent RecordBuilder.
      * @return A new CustomerEvent RecordBuilder
      */
-    public static io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder newBuilder() {
-        return new io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder();
+    public static CustomerEvent.Builder newBuilder() {
+        return new CustomerEvent.Builder();
     }
 
     /**
@@ -286,13 +286,13 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
      * @param other The existing builder to copy.
      * @return A new CustomerEvent RecordBuilder
      */
-    public static io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder newBuilder(
-            io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder other) {
+    public static CustomerEvent.Builder newBuilder(
+            CustomerEvent.Builder other) {
         if (other == null) {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder();
+            return new CustomerEvent.Builder();
         }
         else {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder(other);
+            return new CustomerEvent.Builder(other);
         }
     }
 
@@ -302,13 +302,13 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
      * @param other The existing instance to copy.
      * @return A new CustomerEvent RecordBuilder
      */
-    public static io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder newBuilder(
-            io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent other) {
+    public static CustomerEvent.Builder newBuilder(
+            CustomerEvent other) {
         if (other == null) {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder();
+            return new CustomerEvent.Builder();
         }
         else {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder(other);
+            return new CustomerEvent.Builder(other);
         }
     }
 
@@ -324,13 +324,13 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
 
         private CharSequence email;
 
-        private java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address> addresses;
+        private java.util.List<Address> addresses;
 
         private Long id;
 
         private Integer version;
 
-        private java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> paymentMethods;
+        private java.util.List<PaymentMethod> paymentMethods;
 
         /** Creates a new Builder */
         private Builder() {
@@ -341,7 +341,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Creates a Builder by copying an existing Builder.
          * @param other The existing Builder to copy.
          */
-        private Builder(io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder other) {
+        private Builder(CustomerEvent.Builder other) {
             super(other);
             if (isValidValue(fields()[0], other.name)) {
                 this.name = data().deepCopy(fields()[0].schema(), other.name);
@@ -373,7 +373,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Creates a Builder by copying an existing CustomerEvent instance
          * @param other The existing instance to copy.
          */
-        private Builder(io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent other) {
+        private Builder(CustomerEvent other) {
             super(SCHEMA$, MODEL$);
             if (isValidValue(fields()[0], other.name)) {
                 this.name = data().deepCopy(fields()[0].schema(), other.name);
@@ -414,7 +414,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'name'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder setName(CharSequence value) {
+        public CustomerEvent.Builder setName(CharSequence value) {
             validate(fields()[0], value);
             this.name = value;
             fieldSetFlags()[0] = true;
@@ -433,7 +433,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'name' field. Customer name
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder clearName() {
+        public CustomerEvent.Builder clearName() {
             name = null;
             fieldSetFlags()[0] = false;
             return this;
@@ -452,7 +452,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'email'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder setEmail(CharSequence value) {
+        public CustomerEvent.Builder setEmail(CharSequence value) {
             validate(fields()[1], value);
             this.email = value;
             fieldSetFlags()[1] = true;
@@ -471,7 +471,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'email' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder clearEmail() {
+        public CustomerEvent.Builder clearEmail() {
             email = null;
             fieldSetFlags()[1] = false;
             return this;
@@ -481,7 +481,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Gets the value of the 'addresses' field.
          * @return The value.
          */
-        public java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address> getAddresses() {
+        public java.util.List<Address> getAddresses() {
             return addresses;
         }
 
@@ -490,8 +490,8 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'addresses'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder setAddresses(
-                java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address> value) {
+        public CustomerEvent.Builder setAddresses(
+                java.util.List<Address> value) {
             validate(fields()[2], value);
             this.addresses = value;
             fieldSetFlags()[2] = true;
@@ -510,7 +510,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'addresses' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder clearAddresses() {
+        public CustomerEvent.Builder clearAddresses() {
             addresses = null;
             fieldSetFlags()[2] = false;
             return this;
@@ -529,7 +529,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'id'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder setId(Long value) {
+        public CustomerEvent.Builder setId(Long value) {
             validate(fields()[3], value);
             this.id = value;
             fieldSetFlags()[3] = true;
@@ -548,7 +548,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'id' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder clearId() {
+        public CustomerEvent.Builder clearId() {
             id = null;
             fieldSetFlags()[3] = false;
             return this;
@@ -567,7 +567,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'version'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder setVersion(Integer value) {
+        public CustomerEvent.Builder setVersion(Integer value) {
             validate(fields()[4], value);
             this.version = value;
             fieldSetFlags()[4] = true;
@@ -586,7 +586,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'version' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder clearVersion() {
+        public CustomerEvent.Builder clearVersion() {
             version = null;
             fieldSetFlags()[4] = false;
             return this;
@@ -596,7 +596,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Gets the value of the 'paymentMethods' field.
          * @return The value.
          */
-        public java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> getPaymentMethods() {
+        public java.util.List<PaymentMethod> getPaymentMethods() {
             return paymentMethods;
         }
 
@@ -605,8 +605,8 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'paymentMethods'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder setPaymentMethods(
-                java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> value) {
+        public CustomerEvent.Builder setPaymentMethods(
+                java.util.List<PaymentMethod> value) {
             validate(fields()[5], value);
             this.paymentMethods = value;
             fieldSetFlags()[5] = true;
@@ -625,7 +625,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'paymentMethods' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent.Builder clearPaymentMethods() {
+        public CustomerEvent.Builder clearPaymentMethods() {
             paymentMethods = null;
             fieldSetFlags()[5] = false;
             return this;
@@ -639,12 +639,12 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
                 record.name = fieldSetFlags()[0] ? this.name : (CharSequence) defaultValue(fields()[0]);
                 record.email = fieldSetFlags()[1] ? this.email : (CharSequence) defaultValue(fields()[1]);
                 record.addresses = fieldSetFlags()[2] ? this.addresses
-                        : (java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address>) defaultValue(
+                        : (java.util.List<Address>) defaultValue(
                                 fields()[2]);
                 record.id = fieldSetFlags()[3] ? this.id : (Long) defaultValue(fields()[3]);
                 record.version = fieldSetFlags()[4] ? this.version : (Integer) defaultValue(fields()[4]);
                 record.paymentMethods = fieldSetFlags()[5] ? this.paymentMethods
-                        : (java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod>) defaultValue(
+                        : (java.util.List<PaymentMethod>) defaultValue(
                                 fields()[5]);
                 return record;
             }
@@ -691,7 +691,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
         out.writeArrayStart();
         out.setItemCount(size0);
         long actualSize0 = 0;
-        for (io.zenwave360.modulith.events.scs.dtos.avro.Address e0 : this.addresses) {
+        for (Address e0 : this.addresses) {
             actualSize0++;
             out.startItem();
             e0.customEncode(out);
@@ -723,7 +723,7 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
         out.writeArrayStart();
         out.setItemCount(size1);
         long actualSize1 = 0;
-        for (io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod e1 : this.paymentMethods) {
+        for (PaymentMethod e1 : this.paymentMethods) {
             actualSize1++;
             out.startItem();
             e1.customEncode(out);
@@ -744,21 +744,21 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
             this.email = in.readString(this.email instanceof Utf8 ? (Utf8) this.email : null);
 
             long size0 = in.readArrayStart();
-            java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address> a0 = this.addresses;
+            java.util.List<Address> a0 = this.addresses;
             if (a0 == null) {
-                a0 = new SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.Address>((int) size0,
+                a0 = new SpecificData.Array<Address>((int) size0,
                         SCHEMA$.getField("addresses").schema());
                 this.addresses = a0;
             }
             else
                 a0.clear();
-            SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.Address> ga0 = (a0 instanceof SpecificData.Array
-                    ? (SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.Address>) a0 : null);
+            SpecificData.Array<Address> ga0 = (a0 instanceof SpecificData.Array
+                    ? (SpecificData.Array<Address>) a0 : null);
             for (; 0 < size0; size0 = in.arrayNext()) {
                 for (; size0 != 0; size0--) {
-                    io.zenwave360.modulith.events.scs.dtos.avro.Address e0 = (ga0 != null ? ga0.peek() : null);
+                    Address e0 = (ga0 != null ? ga0.peek() : null);
                     if (e0 == null) {
-                        e0 = new io.zenwave360.modulith.events.scs.dtos.avro.Address();
+                        e0 = new Address();
                     }
                     e0.customDecode(in);
                     a0.add(e0);
@@ -782,21 +782,21 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
             }
 
             long size1 = in.readArrayStart();
-            java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> a1 = this.paymentMethods;
+            java.util.List<PaymentMethod> a1 = this.paymentMethods;
             if (a1 == null) {
-                a1 = new SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod>((int) size1,
+                a1 = new SpecificData.Array<PaymentMethod>((int) size1,
                         SCHEMA$.getField("paymentMethods").schema());
                 this.paymentMethods = a1;
             }
             else
                 a1.clear();
-            SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> ga1 = (a1 instanceof SpecificData.Array
-                    ? (SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod>) a1 : null);
+            SpecificData.Array<PaymentMethod> ga1 = (a1 instanceof SpecificData.Array
+                    ? (SpecificData.Array<PaymentMethod>) a1 : null);
             for (; 0 < size1; size1 = in.arrayNext()) {
                 for (; size1 != 0; size1--) {
-                    io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod e1 = (ga1 != null ? ga1.peek() : null);
+                    PaymentMethod e1 = (ga1 != null ? ga1.peek() : null);
                     if (e1 == null) {
-                        e1 = new io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod();
+                        e1 = new PaymentMethod();
                     }
                     e1.customDecode(in);
                     a1.add(e1);
@@ -817,22 +817,22 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
 
                     case 2:
                         long size0 = in.readArrayStart();
-                        java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.Address> a0 = this.addresses;
+                        java.util.List<Address> a0 = this.addresses;
                         if (a0 == null) {
-                            a0 = new SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.Address>(
+                            a0 = new SpecificData.Array<Address>(
                                     (int) size0, SCHEMA$.getField("addresses").schema());
                             this.addresses = a0;
                         }
                         else
                             a0.clear();
-                        SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.Address> ga0 = (a0 instanceof SpecificData.Array
-                                ? (SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.Address>) a0 : null);
+                        SpecificData.Array<Address> ga0 = (a0 instanceof SpecificData.Array
+                                ? (SpecificData.Array<Address>) a0 : null);
                         for (; 0 < size0; size0 = in.arrayNext()) {
                             for (; size0 != 0; size0--) {
-                                io.zenwave360.modulith.events.scs.dtos.avro.Address e0 = (ga0 != null ? ga0.peek()
+                                Address e0 = (ga0 != null ? ga0.peek()
                                         : null);
                                 if (e0 == null) {
-                                    e0 = new io.zenwave360.modulith.events.scs.dtos.avro.Address();
+                                    e0 = new Address();
                                 }
                                 e0.customDecode(in);
                                 a0.add(e0);
@@ -862,23 +862,23 @@ public class CustomerEvent extends org.apache.avro.specific.SpecificRecordBase
 
                     case 5:
                         long size1 = in.readArrayStart();
-                        java.util.List<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> a1 = this.paymentMethods;
+                        java.util.List<PaymentMethod> a1 = this.paymentMethods;
                         if (a1 == null) {
-                            a1 = new SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod>(
+                            a1 = new SpecificData.Array<PaymentMethod>(
                                     (int) size1, SCHEMA$.getField("paymentMethods").schema());
                             this.paymentMethods = a1;
                         }
                         else
                             a1.clear();
-                        SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod> ga1 = (a1 instanceof SpecificData.Array
-                                ? (SpecificData.Array<io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod>) a1
+                        SpecificData.Array<PaymentMethod> ga1 = (a1 instanceof SpecificData.Array
+                                ? (SpecificData.Array<PaymentMethod>) a1
                                 : null);
                         for (; 0 < size1; size1 = in.arrayNext()) {
                             for (; size1 != 0; size1--) {
-                                io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod e1 = (ga1 != null ? ga1.peek()
+                                PaymentMethod e1 = (ga1 != null ? ga1.peek()
                                         : null);
                                 if (e1 == null) {
-                                    e1 = new io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod();
+                                    e1 = new PaymentMethod();
                                 }
                                 e1.customDecode(in);
                                 a1.add(e1);

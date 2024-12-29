@@ -53,22 +53,6 @@ public class SpringCloudStreamEventExternalizerConfiguration {
     private static final Logger log = LoggerFactory.getLogger(SpringCloudStreamEventExternalizerConfiguration.class);
 
     @Bean
-    EventExternalizationConfiguration eventExternalizationConfiguration() {
-        return EventExternalizationConfiguration.externalizing()
-            .select(event -> event instanceof Message<?> && getTarget(event) != null)
-            .routeAll(event -> RoutingTarget.forTarget(getTarget(event)).withoutKey())
-            .build();
-    }
-
-    private String getTarget(Object event) {
-        if (event instanceof Message<?> message) {
-            return message.getHeaders()
-                .get(SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER, String.class);
-        }
-        return null;
-    }
-
-    @Bean
     DelegatingEventExternalizer springCloudStreamMessageExternalizer(EventExternalizationConfiguration configuration,
             StreamBridge streamBridge, BeanFactory factory, BindingServiceProperties bindingServiceProperties,
             BinderFactory binderFactory) {

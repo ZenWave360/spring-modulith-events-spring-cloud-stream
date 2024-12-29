@@ -79,7 +79,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
 
     private int id;
 
-    private io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType type;
+    private PaymentMethodType type;
 
     private CharSequence cardNumber;
 
@@ -97,7 +97,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
      * @param type The new value for type
      * @param cardNumber The new value for cardNumber
      */
-    public PaymentMethod(Integer id, io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType type,
+    public PaymentMethod(Integer id, PaymentMethodType type,
             CharSequence cardNumber) {
         this.id = id;
         this.type = type;
@@ -138,7 +138,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
                 id = (Integer) value$;
                 break;
             case 1:
-                type = (io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType) value$;
+                type = (PaymentMethodType) value$;
                 break;
             case 2:
                 cardNumber = (CharSequence) value$;
@@ -168,7 +168,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
      * Gets the value of the 'type' field.
      * @return The value of the 'type' field.
      */
-    public io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType getType() {
+    public PaymentMethodType getType() {
         return type;
     }
 
@@ -176,7 +176,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
      * Sets the value of the 'type' field.
      * @param value the value to set.
      */
-    public void setType(io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType value) {
+    public void setType(PaymentMethodType value) {
         this.type = value;
     }
 
@@ -200,8 +200,8 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
      * Creates a new PaymentMethod RecordBuilder.
      * @return A new PaymentMethod RecordBuilder
      */
-    public static io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder newBuilder() {
-        return new io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder();
+    public static PaymentMethod.Builder newBuilder() {
+        return new PaymentMethod.Builder();
     }
 
     /**
@@ -209,13 +209,13 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
      * @param other The existing builder to copy.
      * @return A new PaymentMethod RecordBuilder
      */
-    public static io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder newBuilder(
-            io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder other) {
+    public static PaymentMethod.Builder newBuilder(
+            PaymentMethod.Builder other) {
         if (other == null) {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder();
+            return new PaymentMethod.Builder();
         }
         else {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder(other);
+            return new PaymentMethod.Builder(other);
         }
     }
 
@@ -225,13 +225,13 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
      * @param other The existing instance to copy.
      * @return A new PaymentMethod RecordBuilder
      */
-    public static io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder newBuilder(
-            io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod other) {
+    public static PaymentMethod.Builder newBuilder(
+            PaymentMethod other) {
         if (other == null) {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder();
+            return new PaymentMethod.Builder();
         }
         else {
-            return new io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder(other);
+            return new PaymentMethod.Builder(other);
         }
     }
 
@@ -244,7 +244,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
 
         private int id;
 
-        private io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType type;
+        private PaymentMethodType type;
 
         private CharSequence cardNumber;
 
@@ -257,7 +257,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
          * Creates a Builder by copying an existing Builder.
          * @param other The existing Builder to copy.
          */
-        private Builder(io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder other) {
+        private Builder(PaymentMethod.Builder other) {
             super(other);
             if (isValidValue(fields()[0], other.id)) {
                 this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -277,7 +277,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
          * Creates a Builder by copying an existing PaymentMethod instance
          * @param other The existing instance to copy.
          */
-        private Builder(io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod other) {
+        private Builder(PaymentMethod other) {
             super(SCHEMA$, MODEL$);
             if (isValidValue(fields()[0], other.id)) {
                 this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -306,7 +306,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'id'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder setId(int value) {
+        public PaymentMethod.Builder setId(int value) {
             validate(fields()[0], value);
             this.id = value;
             fieldSetFlags()[0] = true;
@@ -325,7 +325,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'id' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder clearId() {
+        public PaymentMethod.Builder clearId() {
             fieldSetFlags()[0] = false;
             return this;
         }
@@ -334,7 +334,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
          * Gets the value of the 'type' field.
          * @return The value.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType getType() {
+        public PaymentMethodType getType() {
             return type;
         }
 
@@ -343,8 +343,8 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'type'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder setType(
-                io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType value) {
+        public PaymentMethod.Builder setType(
+                PaymentMethodType value) {
             validate(fields()[1], value);
             this.type = value;
             fieldSetFlags()[1] = true;
@@ -363,7 +363,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'type' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder clearType() {
+        public PaymentMethod.Builder clearType() {
             type = null;
             fieldSetFlags()[1] = false;
             return this;
@@ -382,7 +382,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
          * @param value The value of 'cardNumber'.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder setCardNumber(CharSequence value) {
+        public PaymentMethod.Builder setCardNumber(CharSequence value) {
             validate(fields()[2], value);
             this.cardNumber = value;
             fieldSetFlags()[2] = true;
@@ -401,7 +401,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
          * Clears the value of the 'cardNumber' field.
          * @return This builder.
          */
-        public io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethod.Builder clearCardNumber() {
+        public PaymentMethod.Builder clearCardNumber() {
             cardNumber = null;
             fieldSetFlags()[2] = false;
             return this;
@@ -414,7 +414,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
                 PaymentMethod record = new PaymentMethod();
                 record.id = fieldSetFlags()[0] ? this.id : (Integer) defaultValue(fields()[0]);
                 record.type = fieldSetFlags()[1] ? this.type
-                        : (io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType) defaultValue(fields()[1]);
+                        : (PaymentMethodType) defaultValue(fields()[1]);
                 record.cardNumber = fieldSetFlags()[2] ? this.cardNumber : (CharSequence) defaultValue(fields()[2]);
                 return record;
             }
@@ -467,7 +467,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
         if (fieldOrder == null) {
             this.id = in.readInt();
 
-            this.type = io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType.values()[in.readEnum()];
+            this.type = PaymentMethodType.values()[in.readEnum()];
 
             this.cardNumber = in.readString(this.cardNumber instanceof Utf8 ? (Utf8) this.cardNumber : null);
 
@@ -480,7 +480,7 @@ public class PaymentMethod extends org.apache.avro.specific.SpecificRecordBase
                         break;
 
                     case 1:
-                        this.type = io.zenwave360.modulith.events.scs.dtos.avro.PaymentMethodType.values()[in
+                        this.type = PaymentMethodType.values()[in
                             .readEnum()];
                         break;
 

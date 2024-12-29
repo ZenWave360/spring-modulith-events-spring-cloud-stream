@@ -1,11 +1,11 @@
 package io.zenwave360.modulith.events.scs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.zenwave360.modulith.events.scs.config.SpringCloudStreamEventExternalizerConfiguration;
+import io.zenwave360.modulith.events.scs.config.EnableSpringCloudStreamEventExternalization;
+import io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.EmbeddedKafkaZKBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @EnableAutoConfiguration
-@Import({ SpringCloudStreamEventExternalizerConfiguration.class })
-@EmbeddedKafka(partitions = 1, topics = { "customers-json-topic" })
+@EnableSpringCloudStreamEventExternalization
+@EmbeddedKafka(partitions = 1)
 @EnableTransactionManagement
 public class TestsConfiguration {
 
@@ -28,7 +28,7 @@ public class TestsConfiguration {
 
     @Bean
     EmbeddedKafkaBroker embeddedKafkaBroker() {
-        return new EmbeddedKafkaZKBroker(1, true, 1, "customers-json-topic");
+        return new EmbeddedKafkaZKBroker(1, true, 1);
     }
 
     @Bean
@@ -45,7 +45,7 @@ public class TestsConfiguration {
         }
 
         @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public void onCustomerEventJson(io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent event) {
+        public void onCustomerEventJsonMessage(io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent event) {
             Message<io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent> message = MessageBuilder
                 .withPayload(event)
                 .setHeader(SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER,
@@ -55,13 +55,23 @@ public class TestsConfiguration {
         }
 
         @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public void onCustomerEventAvro(io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent event) {
-            Message<io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent> message = MessageBuilder
+        public void onCustomerEventJsonPojo(io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent event) {
+            applicationEventPublisher.publishEvent(event);
+        }
+
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
+        public void onCustomerEventAvroMessage(CustomerEvent event) {
+            Message<CustomerEvent> message = MessageBuilder
                 .withPayload(event)
                 .setHeader(SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_SENDTO_DESTINATION_HEADER,
                         "customers-avro-out-0") // <- target binding name
                 .build();
             applicationEventPublisher.publishEvent(message);
+        }
+
+        @Transactional(propagation = Propagation.REQUIRES_NEW)
+        public void onCustomerEventAvroPojo(CustomerEvent event) {
+            applicationEventPublisher.publishEvent(event);
         }
 
     }
