@@ -1,4 +1,4 @@
-name: Build
+name: Verify Main and Publish Coverage
 
 on:
   push:
