@@ -10,6 +10,9 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.modulith.events.core.EventSerializer;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 public class MessageEventSerializerTest {
 
     private ObjectMapper objectMapper;
@@ -56,6 +59,11 @@ public class MessageEventSerializerTest {
                     "id" : "cc76cfb5-4ba3-5bf1-f652-9f44dfc24c85",
                     "timestamp" : 1735318992520
                   },
+                  "_header_types" : {
+                    "headerkey" : "java.lang.String",
+                    "id" : "java.util.UUID",
+                    "timestamp" : "java.lang.Long"
+                  },
                   "payload" : {
                     "name" : "John Doe",
                     "addresses" : [ ],
@@ -67,17 +75,25 @@ public class MessageEventSerializerTest {
         Message<?> deserialized = eventSerializer.deserialize(serializedMessage, Message.class);
 
         Assertions.assertTrue(deserialized.getPayload() instanceof CustomerEvent);
+        Assertions.assertTrue(deserialized.getHeaders().get("id") instanceof UUID);
     }
 
     @Test
     public void testSerializeDeserializeMessage() throws JsonProcessingException, ClassNotFoundException {
         var customerEvent = new CustomerEvent().withName("John Doe");
-        Message<?> message = MessageBuilder.withPayload(customerEvent).setHeader("headerKey", "headerValue").build();
+        Message<?> message = MessageBuilder.withPayload(customerEvent)
+                .setHeader("headerKey", "headerValue")
+                .setHeader("uuid", UUID.randomUUID())
+                .setHeader("long", System.currentTimeMillis())
+                .setHeader("number", BigDecimal.ONE)
+                .build();
 
         Object serialized = eventSerializer.serialize(message);
         Message<?> deserialized = eventSerializer.deserialize(serialized, Message.class);
 
         Assertions.assertEquals(message.getPayload().getClass(), deserialized.getPayload().getClass());
+        Assertions.assertEquals(UUID.class, deserialized.getHeaders().get("uuid").getClass());
+        Assertions.assertEquals(BigDecimal.class, deserialized.getHeaders().get("number").getClass());
     }
 
     @Test

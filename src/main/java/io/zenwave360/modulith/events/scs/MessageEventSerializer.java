@@ -5,6 +5,9 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
@@ -12,14 +15,42 @@ import org.springframework.modulith.events.core.EventSerializer;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
-public class MessageEventSerializer implements EventSerializer {
+public class MessageEventSerializer implements EventSerializer, InitializingBean {
+
+    protected Logger log = LoggerFactory.getLogger(getClass());
 
     private final ObjectMapper jacksonMapper;
 
+    private boolean processHeaderTypes = true;
+
+    private String[] headerTypesWhiteList = { "java..*" };
+
+    private List<Pattern> headerTypesWhiteListPatterns;
+
     public MessageEventSerializer(ObjectMapper jacksonMapper) {
         this.jacksonMapper = jacksonMapper;
+        afterPropertiesSet(); // Initialize if used outside of Spring
+    }
+
+    public void setProcessHeaderTypes(boolean processHeaderTypes) {
+        this.processHeaderTypes = processHeaderTypes;
+    }
+
+    public void setHeaderTypesWhiteList(String[] headerTypesWhiteList) {
+        this.headerTypesWhiteList = headerTypesWhiteList;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        headerTypesWhiteListPatterns = Stream.of(headerTypesWhiteList)
+            .map(this::convertToRegex)
+            .map(Pattern::compile)
+            .toList();
     }
 
     protected Map<String, Object> serializeToMap(Object payload) {
@@ -32,6 +63,7 @@ public class MessageEventSerializer implements EventSerializer {
         if (event instanceof Message<?> message) {
             Map<String, Object> serializedMessage = new HashMap<>();
             serializedMessage.put("headers", message.getHeaders());
+            serializedMessage.put("_header_types", extractHeaderTypes(message.getHeaders()));
 
             var payload = serializeToMap(message.getPayload());
             payload.put("_class", message.getPayload().getClass().getName());
@@ -58,6 +90,13 @@ public class MessageEventSerializer implements EventSerializer {
             JsonNode node = jacksonMapper.readTree(serialized.toString());
             JsonNode headersNode = node.get("headers");
             Map<String, Object> headers = jacksonMapper.convertValue(headersNode, Map.class);
+
+            if (processHeaderTypes) {
+                JsonNode headerTypesNode = node.get("_header_types");
+                Map<String, String> headerTypes = jacksonMapper.convertValue(headerTypesNode, Map.class);
+                processHeaderTypes(headerTypes, headers);
+            }
+
             JsonNode payloadNode = node.get("payload");
             Object payload = null;
             if (payloadNode.get("_class") != null) {
@@ -97,6 +136,60 @@ public class MessageEventSerializer implements EventSerializer {
         catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected Map<String, String> extractHeaderTypes(Map<String, Object> headers) {
+        Map<String, String> headerTypes = new HashMap<>();
+        headers.forEach((key, value) -> headerTypes.put(key, value.getClass().getName()));
+        return headerTypes;
+    }
+
+    protected void processHeaderTypes(Map<String, String> headerTypes, Map<String, Object> headers) {
+        if (headerTypes == null) {
+            return;
+        }
+        headers.forEach((key, value) -> {
+            if (headerTypes.containsKey(key)) {
+                var headerType = headerTypes.get(key);
+                if (!isHeaderTypeAllowed(headerType)) {
+                    return;
+                }
+                try {
+                    if (value instanceof String) {
+                        headers.put(key, jacksonMapper.convertValue(value, Class.forName(headerType)));
+                    }
+                    else {
+                        headers.put(key, jacksonDeserialize(value, Class.forName(headerType)));
+                    }
+                }
+                catch (Exception e) {
+                    log.error("Failed to process header: {key: {}, value: {}, type: {}}. Error: {}", key, value,
+                            headerType, e.getMessage());
+                }
+            }
+        });
+    }
+
+    protected boolean isHeaderTypeAllowed(String headerType) {
+        if (headerTypesWhiteListPatterns.isEmpty()) {
+            return true;
+        }
+        return headerTypesWhiteListPatterns.stream().anyMatch(p -> p.matcher(headerType).matches());
+    }
+
+    /**
+     * Converts an AOP pointcut pattern to a Java regex pattern.
+     * @param aopPattern the AOP pointcut pattern (e.g., com.example..service.*)
+     * @return the regex equivalent of the AOP pattern
+     */
+    protected String convertToRegex(String aopPattern) {
+        // Escape dots and replace ".." with ".*" (matches any number of sub-packages)
+        String regex = aopPattern //
+            .replace("..", "__") // Match zero or more sub-packages (save for later)
+            .replace(".", "\\.") // Escape dots for regex
+            .replace("*", "[^\\.]*") // Match any class or method name
+            .replace("__", ".*"); // Match zero or more sub-packages (restore)
+        return "^" + regex + "$"; // Ensure full string match
     }
 
 }
