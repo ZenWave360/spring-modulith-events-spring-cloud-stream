@@ -28,8 +28,10 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Update parent POM version
+        id: update-parent-pom
         run: |
           NEW_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oPm1 "(?<=<latest>)[^<]+")
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
           mvn versions:update-parent -DparentVersion=[${NEW_VERSION}] -DgenerateBackupPoms=false
 
       - name: Build with new parent version
@@ -37,9 +39,11 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
+        env:
+          NEW_VERSION: ${{ steps.update-parent-pom.outputs.NEW_VERSION }}
         with:
-          commit-message: 'Update Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
-          branch: update-parent-pom-${{ steps.update-parent-pom.outputs.NEW_VERSION }}
-          title: 'Update Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
-          body: 'This PR updates Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
+          commit-message: 'Update Spring-Modulith Parent POM version to ${{ env.NEW_VERSION }}'
+          branch: update-parent-pom-${{ env.NEW_VERSION }}
+          title: 'Update Spring-Modulith Parent POM version to ${{ env.NEW_VERSION }}'
+          body: 'This PR updates Spring-Modulith Parent POM version to ${{ env.NEW_VERSION }}'
           labels: 'dependencies'
