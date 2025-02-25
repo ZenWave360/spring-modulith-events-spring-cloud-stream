@@ -32,7 +32,7 @@ jobs:
         run: |
           NEW_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oPm1 "(?<=<latest>)[^<]+")
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
-          mvn versions:update-parent -DparentVersion=${{NEW_VERSION}} -DgenerateBackupPoms=false
+          mvn versions:update-parent -DparentVersion=${{NEW_VERSION}} -DskipResolution=true -DgenerateBackupPoms=false
 
       - name: Build with new parent version
         run: mvn clean verify -B
