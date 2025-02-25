@@ -3,7 +3,11 @@ package io.zenwave360.modulith.events.scs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zenwave360.modulith.events.scs.config.EnableSpringCloudStreamEventExternalization;
 import io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent;
+import io.zenwave360.modulith.events.scs.dtos.avro.ExternalizedCustomerEvent;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cloud.stream.schema.avro.AvroSchemaMessageConverter;
+import org.springframework.cloud.stream.schema.avro.AvroSchemaServiceManager;
+import org.springframework.cloud.stream.schema.avro.AvroSchemaServiceManagerImpl;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
@@ -34,6 +38,11 @@ public class TestsConfiguration {
     @Bean
     CustomerEventsProducer customerEventsProducer(ApplicationEventPublisher applicationEventPublisher) {
         return new CustomerEventsProducer(applicationEventPublisher);
+    }
+
+    @Bean
+    public static AvroSchemaMessageConverter avroSchemaMessageConverter() {
+        return new AvroSchemaMessageConverter(new AvroSchemaServiceManagerImpl());
     }
 
     static class CustomerEventsProducer {
@@ -70,7 +79,7 @@ public class TestsConfiguration {
         }
 
         @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public void onCustomerEventAvroPojo(CustomerEvent event) {
+        public void onCustomerEventAvroPojo(ExternalizedCustomerEvent event) {
             applicationEventPublisher.publishEvent(event);
         }
 
