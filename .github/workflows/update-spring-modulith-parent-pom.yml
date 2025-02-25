@@ -39,11 +39,9 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
-        env:
-          NEW_VERSION: ${{ steps.update-parent-pom.outputs.NEW_VERSION }}
         with:
-          commit-message: 'Update Spring-Modulith Parent POM version to ${{ env.NEW_VERSION }}'
-          branch: update-parent-pom-${{ env.NEW_VERSION }}
-          title: 'Update Spring-Modulith Parent POM version to ${{ env.NEW_VERSION }}'
-          body: 'This PR updates Spring-Modulith Parent POM version to ${{ env.NEW_VERSION }}'
+          commit-message: 'Update Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
+          branch: update-parent-pom-${{ steps.update-parent-pom.outputs.NEW_VERSION }}
+          title: 'Update Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
+          body: 'This PR updates Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
           labels: 'dependencies'
