@@ -27,7 +27,7 @@ jobs:
           git config user.name ${{ github.actor }}
 
       - name: Prepare Release
-        run: mvn -B release:prepare -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}
+        run: mvn -B release:prepare -DbackupPoms=false -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ github.token }}
@@ -40,3 +40,6 @@ jobs:
           title: 'Release ${{ github.event.inputs.releaseVersion }}'
           body: 'Release ${{ github.event.inputs.releaseVersion }}'
           labels: 'release'
+
+      - name: Push Release Tag
+        run: git push --tags
