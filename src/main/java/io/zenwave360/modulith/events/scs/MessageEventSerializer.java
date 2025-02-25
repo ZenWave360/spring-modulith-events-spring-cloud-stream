@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
@@ -16,12 +18,31 @@ import java.util.Map;
 
 public class MessageEventSerializer implements EventSerializer {
 
+    protected Logger log = LoggerFactory.getLogger(getClass());
+
     private final ObjectMapper jacksonMapper;
+
+    /**
+     * Controls whether to store headers types to be used for deserialization. Default is true.
+     */
+    private boolean processHeaderTypes = true;
 
     public MessageEventSerializer(ObjectMapper jacksonMapper) {
         this.jacksonMapper = jacksonMapper;
     }
 
+    public void setProcessHeaderTypes(boolean processHeaderTypes) {
+        this.processHeaderTypes = processHeaderTypes;
+    }
+
+    /**
+     * Convert the payload to a Map so it can be serialized to JSON.
+     * <p>
+     * Subclasses (i.e AvroSerializer) can override this method to customize the serialization.
+     *
+     * @param payload
+     * @return
+     */
     protected Map<String, Object> serializeToMap(Object payload) {
         ObjectNode objectNode = jacksonMapper.valueToTree(payload);
         return jacksonMapper.convertValue(objectNode, Map.class);
@@ -32,6 +53,7 @@ public class MessageEventSerializer implements EventSerializer {
         if (event instanceof Message<?> message) {
             Map<String, Object> serializedMessage = new HashMap<>();
             serializedMessage.put("headers", message.getHeaders());
+            serializedMessage.put("_header_types", extractHeaderTypes(message.getHeaders()));
 
             var payload = serializeToMap(message.getPayload());
             payload.put("_class", message.getPayload().getClass().getName());
@@ -58,6 +80,13 @@ public class MessageEventSerializer implements EventSerializer {
             JsonNode node = jacksonMapper.readTree(serialized.toString());
             JsonNode headersNode = node.get("headers");
             Map<String, Object> headers = jacksonMapper.convertValue(headersNode, Map.class);
+
+            if (processHeaderTypes) {
+                JsonNode headerTypesNode = node.get("_header_types");
+                Map<String, String> headerTypes = jacksonMapper.convertValue(headerTypesNode, Map.class);
+                processHeaderTypes(headerTypes, headers);
+            }
+
             JsonNode payloadNode = node.get("payload");
             Object payload = null;
             if (payloadNode.get("_class") != null) {
@@ -97,6 +126,35 @@ public class MessageEventSerializer implements EventSerializer {
         catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected Map<String, String> extractHeaderTypes(Map<String, Object> headers) {
+        Map<String, String> headerTypes = new HashMap<>();
+        headers.forEach((key, value) -> headerTypes.put(key, value.getClass().getName()));
+        return headerTypes;
+    }
+
+    protected void processHeaderTypes(Map<String, String> headerTypes, Map<String, Object> headers) {
+        if (headerTypes == null) {
+            return;
+        }
+        headers.forEach((key, value) -> {
+            if (headerTypes.containsKey(key)) {
+                var headerType = headerTypes.get(key);
+                try {
+                    if (value instanceof String) {
+                        headers.put(key, jacksonMapper.convertValue(value, Class.forName(headerType)));
+                    }
+                    else {
+                        headers.put(key, jacksonDeserialize(value, Class.forName(headerType)));
+                    }
+                }
+                catch (Exception e) {
+                    log.error("Failed to process header: {key: {}, value: {}, type: {}}. Error: {}", key, value,
+                            headerType, e.getMessage());
+                }
+            }
+        });
     }
 
 }

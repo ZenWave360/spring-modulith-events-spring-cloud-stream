@@ -9,7 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Configuration
-@Import({ SpringCloudStreamEventExternalizerConfiguration.class, MessageEventSerializerConfiguration.class, MessageExternalizationConfiguration.class })
+@Import({ SpringCloudStreamEventExternalizerConfiguration.class, MessageEventSerializerConfiguration.class,
+        MessageExternalizationConfiguration.class })
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EnableSpringCloudStreamEventExternalization {
