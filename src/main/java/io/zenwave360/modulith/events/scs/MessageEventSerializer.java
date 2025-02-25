@@ -22,6 +22,9 @@ public class MessageEventSerializer implements EventSerializer {
 
     private final ObjectMapper jacksonMapper;
 
+    /**
+     * Controls whether to store headers types to be used for deserialization. Default is true.
+     */
     private boolean processHeaderTypes = true;
 
     public MessageEventSerializer(ObjectMapper jacksonMapper) {
@@ -32,6 +35,14 @@ public class MessageEventSerializer implements EventSerializer {
         this.processHeaderTypes = processHeaderTypes;
     }
 
+    /**
+     * Convert the payload to a Map so it can be serialized to JSON.
+     * <p>
+     * Subclasses (i.e AvroSerializer) can override this method to customize the serialization.
+     *
+     * @param payload
+     * @return
+     */
     protected Map<String, Object> serializeToMap(Object payload) {
         ObjectNode objectNode = jacksonMapper.valueToTree(payload);
         return jacksonMapper.convertValue(objectNode, Map.class);
