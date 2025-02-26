@@ -1,7 +1,7 @@
 # Spring-Modulith Events Externalizer for Spring Cloud Stream
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.zenwave360.sdk/spring-modulith-events-scs.svg?label=Maven%20Central&logo=apachemaven)](https://search.maven.org/artifact/io.zenwave360.sdk/spring-modulith-events-scs)
-[![build](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream/workflows/Build/badge.svg)](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream/actions/workflows/build.yml)
+[![build](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream/workflows/Build%20and%20Publish%20Maven%20Snapshots/badge.svg)](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream/actions/workflows/publish-maven-snapshots.yml)
 [![coverage](https://raw.githubusercontent.com/ZenWave360/spring-modulith-events-spring-cloud-stream/badges/jacoco.svg)](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream/actions/workflows/build.yml)
 [![branches coverage](https://raw.githubusercontent.com/ZenWave360/spring-modulith-events-spring-cloud-stream/badges/branches.svg)](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream/actions/workflows/build.yml)
 [![GitHub](https://img.shields.io/github/license/ZenWave360/spring-modulith-events-spring-cloud-stream)](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream/blob/main/LICENSE)

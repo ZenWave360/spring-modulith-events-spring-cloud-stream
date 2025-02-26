@@ -1,8 +1,8 @@
-name: Build
+name: Build and Publish ZenWave Snapshots
 
 on:
-  push:
-    branches: [ develop, next ]
+#  push:
+#    branches: [ develop, next ]
 #  pull_request:
 #    branches: [ '**' ]
   workflow_dispatch:
@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'adopt'
+          distribution: 'temurin'
 
       - name: Build and Deploy Snapshots to a GitHub Branch
         env:
