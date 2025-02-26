@@ -68,6 +68,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         run: |
           echo $(ls -l)
+          TAG_NAME=${{ github.event.release.tag_name || github.run_id }}
           cd badges
           if [[ `git status --porcelain` ]]; then
             git config --global user.name 'github-agit pctions'
@@ -75,6 +76,6 @@ jobs:
             git add *.svg *.json jacoco-report.csv jacoco/*
             git commit -m "coverage = ${{ steps.jacoco.outputs.coverage }} branches = ${{ steps.jacoco.outputs.branches }}" *.svg *.json jacoco-report.csv jacoco/*
             git push
-            git tag coverage_badges_${{github.event.release.tag_name}}
+            git tag coverage_badges_${TAG_NAME}
             git push --tags
           fi
