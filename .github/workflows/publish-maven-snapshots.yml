@@ -25,7 +25,7 @@ jobs:
           server-password: MAVEN_PASSWORD
 
       - name: Enforce Snapshot Version
-        run: mvn enforcer:enforce -Drules=requireSnapshotVersion
+        run: mvn enforcer:enforce@enforce-snapshot-version
 
       - name: Publish to the Maven Central Repository
         run: mvn --batch-mode deploy -DdeployAtEnd=true -Dmaven.javadoc.skip=false

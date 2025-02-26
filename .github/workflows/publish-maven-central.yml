@@ -26,7 +26,7 @@ jobs:
           server-password: MAVEN_PASSWORD
 
       - name: Enforce Release Version
-        run: mvn enforcer:enforce -Drules=requireReleaseVersion
+        run: mvn enforcer:enforce@enforce-release-version
 
       - name: Publish to the Maven Central Repository
         run: mvn --batch-mode deploy -DdeployAtEnd=true -Dmaven.javadoc.skip=false

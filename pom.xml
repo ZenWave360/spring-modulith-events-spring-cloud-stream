@@ -293,6 +293,31 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce-release-version</id>
+                        <configuration>
+                            <rules>
+                                <requireReleaseVersion/>
+                            </rules>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>enforce-snapshot-version</id>
+                        <configuration>
+                            <rules>
+                                <requireSnapshotVersion>
+                                    <failWhenParentIsRelease>false</failWhenParentIsRelease>
+                                </requireSnapshotVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
