@@ -2,24 +2,33 @@ name: Publish to Maven Central
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to check out'
+        required: true
+        default: 'main'
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.release.tag_name }}
       - name: Set up Java for publishing to Maven Central Repository
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'adopt'
-          server-id: ossrh
+          distribution: 'temurin'
+          server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+
       - name: Publish to the Maven Central Repository
-        run: mvn -Prelease --batch-mode deploy -DdeployAtEnd=true -Dmaven.javadoc.skip=false
+        run: mvn --batch-mode deploy -DdeployAtEnd=true -Dmaven.javadoc.skip=false
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN }}
           SIGN_KEY: ${{ secrets.SIGN_KEY }}
           SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
 
