@@ -41,7 +41,7 @@ jobs:
           STAGING_BRANCH="staging/$GROUP_ID/$ARTIFACT_ID/$VERSION/$(date -u +"%Y%m%d.%H%M%S%3N")"
           
           # Build the project and deploy to the local repo branch
-          mvn clean deploy -DaltDeploymentRepository=snapshot-repo::default::file://$(pwd)/target-branch/
+          mvn clean deploy -DaltDeploymentRepository=zenwave-maven-snapshots::default::file://$(pwd)/target-branch/
 
           # Push the updated snapshots to the branch
           cd target-branch

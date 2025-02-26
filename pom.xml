@@ -35,6 +35,12 @@
         </developer>
     </developers>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>zenwave-maven-snapshots</id>
+            <url>https://raw.githubusercontent.com/ZenWave360/maven-snapshots/refs/heads/main</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <scm>
         <connection>scm:git:git://github.com/ZenWave360/spring-modulith-events-scs.git</connection>
