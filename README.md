@@ -8,6 +8,8 @@
 
 Spring-Modulith Events Externalizer that uses Spring Cloud Stream supporting both JSON and Avro serialization formats.
 
+Check out the blog post here: https://www.zenwave360.io/posts/Spring-Modulith-Events-Spring-Cloud-Stream-Externalizer/
+
 ## Getting Started
 
 ### Dependency
