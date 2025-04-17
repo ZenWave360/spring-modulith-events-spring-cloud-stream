@@ -125,8 +125,8 @@ In order to test snapshot versions of this library, add the following repository
 
 ```xml
 <repository>
-    <id>gh</id>
-    <url>https://raw.githubusercontent.com/ZenWave360/maven-snapshots/refs/heads/main</url>
+    <id>maven-snapshots</id>
+    <url>https://central.sonatype.com/repository/maven-snapshots</url>
     <snapshots>
         <enabled>true</enabled>
     </snapshots>
