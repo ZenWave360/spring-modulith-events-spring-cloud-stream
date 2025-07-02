@@ -1,4 +1,5 @@
 spring.main.banner-mode: OFF
+spring.main.allow-bean-definition-overriding: true
 spring.modulith.events.jdbc.schema-initialization.enabled: true
 spring.modulith.events.externalization.enabled: true
 
