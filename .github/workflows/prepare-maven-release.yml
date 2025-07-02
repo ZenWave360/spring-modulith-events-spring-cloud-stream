@@ -45,7 +45,7 @@ jobs:
           labels: 'release'
 
       - name: Enable Pull Request Automerge (Main)
-        run: gh pr merge --merge --auto "${{ steps.cpr.outputs.pull-request-number }}"
+        run: gh pr merge --merge --auto --delete-branch "${{ steps.cpr.outputs.pull-request-number }}"
         env:
           GH_TOKEN: ${{ github.token }}
 
