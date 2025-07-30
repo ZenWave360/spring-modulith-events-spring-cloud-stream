@@ -1,0 +1,50 @@
+name: Update Spring-Modulith Parent POM Version 2.x
+
+on:
+  schedule:
+    - cron: '0 1 * * *' # Runs daily at 1 AM (1 hour after the 1.4.x workflow)
+  workflow_dispatch:
+
+jobs:
+  update-parent-pom-2x:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: next/spring-boot-4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Update parent POM version to 2.x
+        id: update-parent-pom
+        run: |
+          NEW_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oP '<version>2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?' | sort -V | tail -1)
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+          mvn versions:update-parent -DparentVersion=${NEW_VERSION} -DskipResolution=true -DgenerateBackupPoms=false
+
+      - name: Build with new parent version
+        run: mvn clean verify -B
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: 'Update Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
+          branch: update-parent-pom-2x-${{ steps.update-parent-pom.outputs.NEW_VERSION }}
+          title: 'Update Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
+          body: 'This PR updates Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }} for Spring Boot 4 compatibility'
+          labels: 'dependencies'
+          base: next/spring-boot-4
