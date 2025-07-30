@@ -30,7 +30,7 @@ jobs:
       - name: Update parent POM version
         id: update-parent-pom
         run: |
-          NEW_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oPm1 "(?<=<latest>)[^<]+")
+          NEW_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oP '<version>1\.4\.[0-9]+</version>' | grep -oP '1\.4\.[0-9]+' | sort -V | tail -1)
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
           mvn versions:update-parent -DparentVersion=${NEW_VERSION} -DskipResolution=true -DgenerateBackupPoms=false
 
