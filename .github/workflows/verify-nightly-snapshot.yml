@@ -33,18 +33,22 @@ jobs:
         run: |
           SPRING_BOOT_VERSION=$(curl -s "https://repo.spring.io/artifactory/snapshot/org/springframework/boot/spring-boot-dependencies/maven-metadata.xml" | grep '<version>4\.[0-9]*\.[0-9]*-SNAPSHOT</version>' | sed 's/.*<version>\(.*\)<\/version>.*/\1/' | sort -V | tail -1)
           SPRING_CLOUD_VERSION=$(curl -s "https://repo.spring.io/artifactory/snapshot/org/springframework/cloud/spring-cloud-dependencies/maven-metadata.xml" | grep '<version>2025\.[0-9]*\.[0-9]*-SNAPSHOT</version>' | sed 's/.*<version>\(.*\)<\/version>.*/\1/' | sort -V | tail -1)
-          
+           SPRING_CLOUD_STREAM_SCHEMA_VERSION=$(curl -s "https://repo.spring.io/artifactory/snapshot/org/springframework/cloud/spring-cloud-stream-schema/maven-metadata.xml" | grep '<version>[0-9]*\.[0-9]*\.[0-9]*.*</version>' | sed 's/.*<version>\(.*\)<\/version>.*/\1/' | sort -V | tail -1)
+
           echo "SPRING_BOOT_VERSION=$SPRING_BOOT_VERSION" >> $GITHUB_ENV
           echo "SPRING_CLOUD_VERSION=$SPRING_CLOUD_VERSION" >> $GITHUB_ENV
+          echo "SPRING_CLOUD_STREAM_SCHEMA_VERSION=$SPRING_CLOUD_STREAM_SCHEMA_VERSION" >> $GITHUB_ENV
 
           mvn versions:update-parent -DparentVersion=2.1.0-SNAPSHOT -DskipResolution=true -DgenerateBackupPoms=false
           mvn versions:set-property -Dproperty=spring-boot.version -DnewVersion=${SPRING_BOOT_VERSION} -DgenerateBackupPoms=false
           mvn versions:set-property -Dproperty=spring-cloud.version -DnewVersion=${SPRING_CLOUD_VERSION} -DgenerateBackupPoms=false
+          mvn versions:set-property -Dproperty=spring-cloud-stream-schema.version -DnewVersion=${SPRING_CLOUD_STREAM_SCHEMA_VERSION} -DgenerateBackupPoms=false
 
       - name: Debug versions
         run: |
           echo "Spring Boot version: ${SPRING_BOOT_VERSION}"
           echo "Spring Cloud version: ${SPRING_CLOUD_VERSION}"
+          echo "Spring Cloud Stream Schema version: ${SPRING_CLOUD_STREAM_SCHEMA_VERSION}"
           mvn dependency:tree -q -B
 
       - name: Verify with 2.1.0-SNAPSHOT
