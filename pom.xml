@@ -67,6 +67,7 @@
 
         <spring-boot.version>4.0.0</spring-boot.version>
         <spring-cloud.version>2025.1.0</spring-cloud.version>
+        <spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
         <avro.version>1.11.4</avro.version>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -153,6 +154,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream-schema</artifactId>
+            <version>${spring-cloud-stream-schema.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
