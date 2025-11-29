@@ -36,5 +36,10 @@ jobs:
           mvn versions:update-parent -DparentVersion=2.1.0-SNAPSHOT -DskipResolution=true -DgenerateBackupPoms=false
           mvn versions:set-property -Dproperty=spring-boot.version -DnewVersion=${SPRING_BOOT_VERSION} -DgenerateBackupPoms=false
 
+      - name: Debug versions
+        run: |
+          echo "Spring Boot version: ${SPRING_BOOT_VERSION}"
+          mvn dependency:tree | grep -E "(spring-boot|spring-cloud-stream)"
+
       - name: Verify with 2.1.0-SNAPSHOT
         run: mvn clean verify -B
