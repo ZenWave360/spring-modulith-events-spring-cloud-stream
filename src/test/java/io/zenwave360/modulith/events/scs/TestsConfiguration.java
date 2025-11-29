@@ -6,12 +6,11 @@ import io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent;
 import io.zenwave360.modulith.events.scs.dtos.avro.ExternalizedCustomerEvent;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.stream.schema.avro.AvroSchemaMessageConverter;
-import org.springframework.cloud.stream.schema.avro.AvroSchemaServiceManager;
 import org.springframework.cloud.stream.schema.avro.AvroSchemaServiceManagerImpl;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
-import org.springframework.kafka.test.EmbeddedKafkaZKBroker;
+import org.springframework.kafka.test.EmbeddedKafkaKraftBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -32,7 +31,7 @@ public class TestsConfiguration {
 
     @Bean
     EmbeddedKafkaBroker embeddedKafkaBroker() {
-        return new EmbeddedKafkaZKBroker(1, true, 1);
+        return new EmbeddedKafkaKraftBroker(1, 1);
     }
 
     @Bean
