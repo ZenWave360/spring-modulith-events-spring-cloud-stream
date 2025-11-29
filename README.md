@@ -46,6 +46,8 @@ public class SpringCloudStreamEventsConfig {
 
 This configuration ensures that, in addition to events annotated with `@Externalized`, all events of type `org.springframework.messaging.Message` with a header named `SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_EVENT_HEADER` will be externalized and routed to their specified destination using the value of this header as the routing target.
 
+If using Spring-Boot 4, you need to either provide a `com.fasterxml.jackson.databind.ObjectMapper` bean or add `org.springframework.boot:spring-boot-jackson2` as dependency.
+
 ---
 
 ## Event Serialization
