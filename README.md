@@ -9,6 +9,7 @@
 Spring-Modulith Events Externalizer that uses Spring Cloud Stream supporting both JSON and Avro serialization formats.
 
 Check out the blog post here: https://www.zenwave360.io/posts/Spring-Modulith-Events-Spring-Cloud-Stream-Externalizer/
+Companion sample project: https://github.com/EDALearn/EDA-TransactionalOutbox-Modulith-JPA
 
 ## Getting Started
 
@@ -23,6 +24,15 @@ Add the following Maven dependency to your project:
 </dependency>
 ```
 
+## Versions
+
+This project was built and tested with the following versions:
+
+| spring-modulith-events-scs | Spring Modulith | Spring Boot | Spring Cloud | SCSt Schema          |
+|----------------------------|-----------------|-------------|--------------|----------------------|
+| 1.0.x                      | 1.4.x           | 3.4.x       | 2024.0.0     | 2.2.1.RELEASE        |
+| 1.1.x                      | 2.0.x           | 4.0.x       | 2025.1.0     | 3.0.0.BUILD-SNAPSHOT |
+
 ### Configuration
 Use `@EnableSpringCloudStreamEventExternalization` annotation to enable Spring Cloud Stream event externalization in your Spring configuration:
 
@@ -35,6 +45,8 @@ public class SpringCloudStreamEventsConfig {
 ```
 
 This configuration ensures that, in addition to events annotated with `@Externalized`, all events of type `org.springframework.messaging.Message` with a header named `SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_EVENT_HEADER` will be externalized and routed to their specified destination using the value of this header as the routing target.
+
+If using Spring-Boot 4, you need to either provide a `com.fasterxml.jackson.databind.ObjectMapper` bean or add `org.springframework.boot:spring-boot-jackson2` as dependency.
 
 ---
 

@@ -35,7 +35,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Create Pull Request (Main)
-        id: cpr
+        id: cpr-main
         uses: peter-evans/create-pull-request@v5
         with:
           commit-message: 'Release ${{ github.event.inputs.releaseVersion }}'
@@ -45,7 +45,23 @@ jobs:
           labels: 'release'
 
       - name: Enable Pull Request Automerge (Main)
-        run: gh pr merge --merge --auto --delete-branch "${{ steps.cpr.outputs.pull-request-number }}"
+        run: gh pr merge --merge --auto "${{ steps.cpr-main.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Create Pull Request (Develop)
+        id: cpr-develop
+        uses: peter-evans/create-pull-request@v5
+        with:
+          base: develop
+          commit-message: 'Release ${{ github.event.inputs.releaseVersion }}'
+          branch: release/${{ github.event.inputs.releaseVersion }}
+          title: 'Release ${{ github.event.inputs.releaseVersion }}'
+          body: 'Release ${{ github.event.inputs.releaseVersion }}'
+          labels: 'release'
+
+      - name: Enable Pull Request Automerge (Develop)
+        run: gh pr merge --merge --auto "${{ steps.cpr-develop.outputs.pull-request-number }}"
         env:
           GH_TOKEN: ${{ github.token }}
 
