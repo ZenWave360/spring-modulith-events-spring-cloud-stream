@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: maintenance/1.0.x
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -45,3 +47,4 @@ jobs:
           title: 'Update Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
           body: 'This PR updates Spring-Modulith Parent POM version to ${{ steps.update-parent-pom.outputs.NEW_VERSION }}'
           labels: 'dependencies'
+          base: maintenance/1.0.x

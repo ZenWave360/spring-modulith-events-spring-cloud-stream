@@ -1,4 +1,4 @@
-name: Verify Spring Boot 4 with 2.0.0-SNAPSHOT
+name: Verify Latest SNAPSHOT versions from SpringBoot and Modulith
 
 on:
   schedule:
@@ -31,7 +31,8 @@ jobs:
 
       - name: Update parent POM to 2.0.0-SNAPSHOT
         run: |
-          mvn versions:update-parent -DparentVersion=2.0.0-SNAPSHOT -DskipResolution=true -DgenerateBackupPoms=false
+          mvn versions:update-parent -DparentVersion=2.1.0-SNAPSHOT -DskipResolution=true -DgenerateBackupPoms=false
+          mvn versions:set-property -Dproperty=spring-boot.version -DnewVersion=4.0.0-SNAPSHOT -DgenerateBackupPoms=false
 
       - name: Verify with 2.0.0-SNAPSHOT
         run: mvn clean verify -B
