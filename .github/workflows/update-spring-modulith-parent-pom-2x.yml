@@ -37,8 +37,17 @@ jobs:
           SPRING_BOOT_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/maven-metadata.xml" | grep -oP '<version>4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?' | sort -V | tail -1)
           echo "SPRING_BOOT_VERSION=$SPRING_BOOT_VERSION" >> $GITHUB_OUTPUT
           
+          echo "Spring Modulith version: $NEW_VERSION"
+          echo "Spring Boot version: $SPRING_BOOT_VERSION"
+          
           mvn versions:update-parent -DparentVersion=${NEW_VERSION} -DskipResolution=true -DgenerateBackupPoms=false
           mvn versions:set-property -Dproperty=spring-boot.version -DnewVersion=${SPRING_BOOT_VERSION} -DgenerateBackupPoms=false
+
+      - name: Debug updated versions
+        run: |
+          echo "Updated Spring Modulith version: ${{ steps.update-parent-pom.outputs.NEW_VERSION }}"
+          echo "Updated Spring Boot version: ${{ steps.update-parent-pom.outputs.SPRING_BOOT_VERSION }}"
+          mvn dependency:tree -q -B | grep -E "(spring-modulith|spring-boot)" || true
 
       - name: Build with new parent version
         run: mvn clean verify -B
