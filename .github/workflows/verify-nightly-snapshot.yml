@@ -45,7 +45,7 @@ jobs:
         run: |
           echo "Spring Boot version: ${SPRING_BOOT_VERSION}"
           echo "Spring Cloud version: ${SPRING_CLOUD_VERSION}"
-          mvn dependency:tree -q -B | grep -E "(spring-boot|spring-cloud-stream)"
+          mvn dependency:tree -q -B
 
       - name: Verify with 2.1.0-SNAPSHOT
         run: mvn clean verify -B
