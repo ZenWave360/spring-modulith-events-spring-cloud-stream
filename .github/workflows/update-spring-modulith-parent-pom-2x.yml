@@ -30,16 +30,16 @@ jobs:
       - name: Update parent POM version to 2.x
         id: update-parent-pom
         run: |
-          NEW_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oP '<version>2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?' | sort -V | tail -1)
+          NEW_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oP '<version>2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?' | grep -v '2\.0\.0-RC' | sort -V | tail -1)
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
-          
-          # Get latest Spring Boot 4.x version
-          SPRING_BOOT_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/maven-metadata.xml" | grep -oP '<version>4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?' | sort -V | tail -1)
+
+          # Get latest Spring Boot 4.x version (excluding 4.0.0-RC)
+          SPRING_BOOT_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/maven-metadata.xml" | grep -oP '<version>4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?' | grep -v '4\.0\.0-RC' | sort -V | tail -1)
           echo "SPRING_BOOT_VERSION=$SPRING_BOOT_VERSION" >> $GITHUB_OUTPUT
-          
+
           echo "Spring Modulith version: $NEW_VERSION"
           echo "Spring Boot version: $SPRING_BOOT_VERSION"
-          
+
           mvn versions:update-parent -DparentVersion=${NEW_VERSION} -DskipResolution=true -DgenerateBackupPoms=false
           mvn versions:set-property -Dproperty=spring-boot.version -DnewVersion=${SPRING_BOOT_VERSION} -DgenerateBackupPoms=false
 
