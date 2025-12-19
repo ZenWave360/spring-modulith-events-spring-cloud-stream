@@ -65,7 +65,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring-boot.version>4.0.0</spring-boot.version>
+        <spring-boot.version>4.0.1</spring-boot.version>
         <spring-cloud.version>2025.1.0</spring-cloud.version>
         <spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
         <avro.version>1.11.4</avro.version>
