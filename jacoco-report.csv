@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs.config,MessageExternalizationConfiguration,2,47,2,6,1,9,2,7,0,5
 io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs.config,MessageEventSerializerConfiguration,5,8,0,0,1,2,1,2,1,2
+io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs.config,MessageExternalizationConfiguration,2,47,2,6,1,9,2,7,0,5
 io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs.config,SpringCloudStreamEventExternalizerConfiguration,0,33,0,0,0,6,0,3,0,3
 io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs,MessageEventSerializer,51,255,3,13,12,54,4,17,1,12
 io.zenwave360.sdk:spring-modulith-events-scs,io.zenwave360.modulith.events.scs,SpringCloudStreamEventExternalizer,4,160,4,12,1,32,4,9,0,5
