@@ -32,6 +32,7 @@ This project was built and tested with the following versions:
 |----------------------------|-----------------|-------------|--------------|---------------|
 | 1.0.x                      | 1.4.x           | 3.4.x       | 2024.0.0     | 2.2.1.RELEASE |
 | 1.1.x                      | 2.0.x           | 4.0.x       | 2025.1.0     | 2.2.1.RELEASE |
+| 1.2.x                      | 2.1.x           | 4.1.x       | 2025.1.0     | 2.2.1.RELEASE |
 
 ### Configuration
 Use `@EnableSpringCloudStreamEventExternalization` annotation to enable Spring Cloud Stream event externalization in your Spring configuration:
