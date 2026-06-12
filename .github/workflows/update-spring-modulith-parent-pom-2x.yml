@@ -52,10 +52,20 @@ jobs:
       - name: Build with new parent version
         run: mvn clean verify -B
 
+      - name: Set target branch
+        id: target
+        run: |
+          if [[ "${{ steps.update-parent-pom.outputs.NEW_VERSION }}" == *-* ]]; then
+            echo "base=next" >> $GITHUB_OUTPUT
+          else
+            echo "base=main" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           commit-message: 'Update Spring-Modulith Parent POM to ${{ steps.update-parent-pom.outputs.NEW_VERSION }} and Spring Boot to ${{ steps.update-parent-pom.outputs.SPRING_BOOT_VERSION }}'
+          base: ${{ steps.target.outputs.base }}
           branch: update-parent-pom-2x-${{ steps.update-parent-pom.outputs.NEW_VERSION }}
           title: 'Update Spring-Modulith Parent POM to ${{ steps.update-parent-pom.outputs.NEW_VERSION }} and Spring Boot to ${{ steps.update-parent-pom.outputs.SPRING_BOOT_VERSION }}'
           body: 'This PR updates Spring-Modulith Parent POM to ${{ steps.update-parent-pom.outputs.NEW_VERSION }} and Spring Boot to ${{ steps.update-parent-pom.outputs.SPRING_BOOT_VERSION }} for Spring Boot 4 compatibility'
