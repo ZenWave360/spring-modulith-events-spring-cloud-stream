@@ -30,11 +30,34 @@ jobs:
       - name: Update parent POM version to 2.x
         id: update-parent-pom
         run: |
-          NEW_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oP '<version>2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?' | grep -v '2\.0\.0-' | sort -V | tail -1)
+          # Picks the highest stable (non-qualified) version. Only falls back to a
+          # pre-release (RC/M/SNAPSHOT) when its X.Y.Z is strictly newer than any
+          # stable release published so far, so an already-GA'd version never gets
+          # "upgraded" back to its own RC (maven-metadata keeps RC entries forever,
+          # and plain `sort -V` ranks "2.1.0-RC1" above "2.1.0").
+          pick_latest() {
+            local all_versions="$1"
+            local stable prerelease stable_base prerelease_base
+            stable=$(echo "$all_versions" | grep -vP -- '-' | sort -V | tail -1)
+            prerelease=$(echo "$all_versions" | grep -P -- '-' | sort -V | tail -1)
+            stable_base=${stable:-0.0.0}
+            prerelease_base=$(echo "$prerelease" | grep -oP '^[0-9]+\.[0-9]+\.[0-9]+')
+            prerelease_base=${prerelease_base:-0.0.0}
+            if [[ -n "$prerelease" && "$stable_base" != "$prerelease_base" && \
+                  "$(printf '%s\n%s\n' "$stable_base" "$prerelease_base" | sort -V | tail -1)" == "$prerelease_base" ]]; then
+              echo "$prerelease"
+            else
+              echo "$stable"
+            fi
+          }
+
+          MODULITH_VERSIONS=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oP '<version>2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?')
+          NEW_VERSION=$(pick_latest "$MODULITH_VERSIONS")
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-          # Get latest Spring Boot 4.x version (excluding 4.0.0-RC and 4.0.0-M)
-          SPRING_BOOT_VERSION=$(curl -s "https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/maven-metadata.xml" | grep -oP '<version>4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?' | grep -v '4\.0\.0-' | sort -V | tail -1)
+          # Get latest Spring Boot 4.x version, same stable-over-prerelease rule
+          SPRING_BOOT_VERSIONS=$(curl -s "https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/maven-metadata.xml" | grep -oP '<version>4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?')
+          SPRING_BOOT_VERSION=$(pick_latest "$SPRING_BOOT_VERSIONS")
           echo "SPRING_BOOT_VERSION=$SPRING_BOOT_VERSION" >> $GITHUB_OUTPUT
 
           echo "Spring Modulith version: $NEW_VERSION"
