@@ -9,9 +9,22 @@ jobs:
   update-parent-pom-2x:
     runs-on: ubuntu-latest
 
+    # main only tracks stable (GA) releases; next tracks the newest version,
+    # including pre-releases (RC/M), so API changes are absorbed there first.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - branch: main
+            allow-prerelease: false
+          - branch: next
+            allow-prerelease: true
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: ${{ matrix.branch }}
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -29,16 +42,22 @@ jobs:
 
       - name: Update parent POM version to 2.x
         id: update-parent-pom
+        env:
+          ALLOW_PRERELEASE: ${{ matrix.allow-prerelease }}
         run: |
-          # Picks the highest stable (non-qualified) version. Only falls back to a
-          # pre-release (RC/M/SNAPSHOT) when its X.Y.Z is strictly newer than any
-          # stable release published so far, so an already-GA'd version never gets
-          # "upgraded" back to its own RC (maven-metadata keeps RC entries forever,
-          # and plain `sort -V` ranks "2.1.0-RC1" above "2.1.0").
+          # Picks the highest stable (non-qualified) version. When pre-releases are
+          # allowed, only falls back to a pre-release (RC/M/SNAPSHOT) when its X.Y.Z is
+          # strictly newer than any stable release published so far, so an already-GA'd
+          # version never gets "upgraded" back to its own RC (maven-metadata keeps RC
+          # entries forever, and plain `sort -V` ranks "2.1.0-RC1" above "2.1.0").
           pick_latest() {
             local all_versions="$1"
             local stable prerelease stable_base prerelease_base
             stable=$(echo "$all_versions" | grep -vP -- '-' | sort -V | tail -1)
+            if [[ "$ALLOW_PRERELEASE" != "true" ]]; then
+              echo "$stable"
+              return
+            fi
             prerelease=$(echo "$all_versions" | grep -P -- '-' | sort -V | tail -1)
             stable_base=${stable:-0.0.0}
             prerelease_base=$(echo "$prerelease" | grep -oP '^[0-9]+\.[0-9]+\.[0-9]+')
@@ -60,6 +79,7 @@ jobs:
           SPRING_BOOT_VERSION=$(pick_latest "$SPRING_BOOT_VERSIONS")
           echo "SPRING_BOOT_VERSION=$SPRING_BOOT_VERSION" >> $GITHUB_OUTPUT
 
+          echo "Target branch: ${{ matrix.branch }}"
           echo "Spring Modulith version: $NEW_VERSION"
           echo "Spring Boot version: $SPRING_BOOT_VERSION"
 
@@ -75,21 +95,12 @@ jobs:
       - name: Build with new parent version
         run: mvn clean verify -B
 
-      - name: Set target branch
-        id: target
-        run: |
-          if [[ "${{ steps.update-parent-pom.outputs.NEW_VERSION }}" == *-* ]]; then
-            echo "base=next" >> $GITHUB_OUTPUT
-          else
-            echo "base=main" >> $GITHUB_OUTPUT
-          fi
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           commit-message: 'Update Spring-Modulith Parent POM to ${{ steps.update-parent-pom.outputs.NEW_VERSION }} and Spring Boot to ${{ steps.update-parent-pom.outputs.SPRING_BOOT_VERSION }}'
-          base: ${{ steps.target.outputs.base }}
-          branch: update-parent-pom-2x-${{ steps.update-parent-pom.outputs.NEW_VERSION }}
-          title: 'Update Spring-Modulith Parent POM to ${{ steps.update-parent-pom.outputs.NEW_VERSION }} and Spring Boot to ${{ steps.update-parent-pom.outputs.SPRING_BOOT_VERSION }}'
+          base: ${{ matrix.branch }}
+          branch: update-parent-pom-2x-${{ matrix.branch }}-${{ steps.update-parent-pom.outputs.NEW_VERSION }}
+          title: '[${{ matrix.branch }}] Update Spring-Modulith Parent POM to ${{ steps.update-parent-pom.outputs.NEW_VERSION }} and Spring Boot to ${{ steps.update-parent-pom.outputs.SPRING_BOOT_VERSION }}'
           body: 'This PR updates Spring-Modulith Parent POM to ${{ steps.update-parent-pom.outputs.NEW_VERSION }} and Spring Boot to ${{ steps.update-parent-pom.outputs.SPRING_BOOT_VERSION }} for Spring Boot 4 compatibility'
           labels: 'dependencies'

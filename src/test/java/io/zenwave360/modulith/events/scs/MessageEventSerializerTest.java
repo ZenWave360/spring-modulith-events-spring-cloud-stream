@@ -1,7 +1,5 @@
 package io.zenwave360.modulith.events.scs;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zenwave360.modulith.events.scs.dtos.json.CustomerEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,20 +7,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.modulith.events.core.EventSerializer;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 public class MessageEventSerializerTest {
 
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
 
     private EventSerializer eventSerializer;
 
     @BeforeEach
     public void setUp() {
-        objectMapper = new ObjectMapper();
-        eventSerializer = new MessageEventSerializer(objectMapper);
+        jsonMapper = new JsonMapper();
+        eventSerializer = new MessageEventSerializer(jsonMapper);
     }
 
     @Test
@@ -51,7 +50,7 @@ public class MessageEventSerializerTest {
     }
 
     @Test
-    public void testDeserializeMessage() throws JsonProcessingException, ClassNotFoundException {
+    public void testDeserializeMessage() {
         String serializedMessage = """
                 {
                   "headers" : {
@@ -79,7 +78,7 @@ public class MessageEventSerializerTest {
     }
 
     @Test
-    public void testSerializeDeserializeMessage() throws JsonProcessingException, ClassNotFoundException {
+    public void testSerializeDeserializeMessage() {
         var customerEvent = new CustomerEvent().withName("John Doe");
         Message<?> message = MessageBuilder.withPayload(customerEvent)
                 .setHeader("headerKey", "headerValue")
@@ -97,7 +96,7 @@ public class MessageEventSerializerTest {
     }
 
     @Test
-    public void testSerializeDeserializeObject() throws JsonProcessingException, ClassNotFoundException {
+    public void testSerializeDeserializeObject() {
         var customerEvent = new CustomerEvent().withName("John Doe");
 
         Object serialized = eventSerializer.serialize(customerEvent);

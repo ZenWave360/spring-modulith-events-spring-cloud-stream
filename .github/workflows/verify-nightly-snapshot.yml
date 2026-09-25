@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: next # SNAPSHOT API changes are absorbed on next, never on main
 
       - name: Set up Java
         uses: actions/setup-java@v3

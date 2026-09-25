@@ -12,7 +12,7 @@
 
     <groupId>io.zenwave360.sdk</groupId>
     <artifactId>spring-modulith-events-scs</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -67,7 +67,7 @@
 
         <spring-boot.version>4.2.0-M1</spring-boot.version>
         <spring-cloud.version>2025.1.0</spring-cloud.version>
-        <spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
+        <!-- intentionally kept on 1.11.x as the supported baseline; 1.12.x is also supported -->
         <avro.version>1.11.4</avro.version>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -119,12 +119,12 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <groupId>tools.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-avro</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <optional>true</optional>
         </dependency>
@@ -153,8 +153,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-schema</artifactId>
-            <version>${spring-cloud-stream-schema.version}</version>
+            <artifactId>spring-cloud-stream-schema-registry-client</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
