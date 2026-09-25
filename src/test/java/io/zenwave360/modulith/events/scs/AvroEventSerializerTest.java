@@ -1,7 +1,5 @@
 package io.zenwave360.modulith.events.scs;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.modulith.events.core.EventSerializer;
+import tools.jackson.databind.json.JsonMapper;
 
 public class AvroEventSerializerTest {
 
@@ -16,7 +15,7 @@ public class AvroEventSerializerTest {
 
     @BeforeEach
     public void setUp() {
-        eventSerializer = new AvroEventSerializer(new ObjectMapper());
+        eventSerializer = new AvroEventSerializer(new JsonMapper());
     }
 
     @Test
@@ -46,7 +45,7 @@ public class AvroEventSerializerTest {
     }
 
     @Test
-    public void testDeserializeMessage() throws JsonProcessingException, ClassNotFoundException {
+    public void testDeserializeMessage() {
         String serializedMessage = """
                 {
                   "headers" : {
@@ -68,7 +67,7 @@ public class AvroEventSerializerTest {
     }
 
     @Test
-    public void testSerializeDeserializeMessage() throws JsonProcessingException, ClassNotFoundException {
+    public void testSerializeDeserializeMessage() {
         var customerEvent = new CustomerEvent();
         customerEvent.setName("John Doe");
         Message<?> message = MessageBuilder.withPayload(customerEvent).setHeader("headerKey", "headerValue").build();
@@ -80,7 +79,7 @@ public class AvroEventSerializerTest {
     }
 
     @Test
-    public void testSerializeDeserializeObject() throws JsonProcessingException, ClassNotFoundException {
+    public void testSerializeDeserializeObject() {
         var customerEvent = new CustomerEvent();
         customerEvent.setName("John Doe");
 

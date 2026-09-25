@@ -1,8 +1,8 @@
 package io.zenwave360.modulith.events.scs;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.dataformat.avro.AvroMapper;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.dataformat.avro.AvroMapper;
 import org.springframework.modulith.events.core.EventSerializer;
 
 import java.util.Map;

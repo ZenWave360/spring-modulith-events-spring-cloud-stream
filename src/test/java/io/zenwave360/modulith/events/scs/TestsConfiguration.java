@@ -1,12 +1,11 @@
 package io.zenwave360.modulith.events.scs;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zenwave360.modulith.events.scs.config.EnableSpringCloudStreamEventExternalization;
 import io.zenwave360.modulith.events.scs.dtos.avro.CustomerEvent;
 import io.zenwave360.modulith.events.scs.dtos.avro.ExternalizedCustomerEvent;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.cloud.stream.schema.avro.AvroSchemaMessageConverter;
-import org.springframework.cloud.stream.schema.avro.AvroSchemaServiceManagerImpl;
+import org.springframework.cloud.stream.schema.registry.avro.AvroSchemaMessageConverter;
+import org.springframework.cloud.stream.schema.registry.avro.AvroSchemaServiceManagerImpl;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
@@ -23,11 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @EmbeddedKafka(partitions = 1)
 @EnableTransactionManagement
 public class TestsConfiguration {
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper(); // Customize if needed
-    }
 
     @Bean
     EmbeddedKafkaBroker embeddedKafkaBroker() {
