@@ -1,10 +1,9 @@
 package io.zenwave360.modulith.events.scs;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.TreeNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
@@ -12,7 +11,6 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.modulith.events.core.EventSerializer;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,13 +67,12 @@ public class MessageEventSerializer implements EventSerializer {
         try {
             return unsafeDeserialize(serialized, type);
         }
-        catch (JsonProcessingException | ClassNotFoundException e) {
+        catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private <T> T unsafeDeserialize(Object serialized, Class<T> type)
-            throws JsonProcessingException, ClassNotFoundException {
+    private <T> T unsafeDeserialize(Object serialized, Class<T> type) throws ClassNotFoundException {
         if (Message.class.isAssignableFrom(type)) {
             JsonNode node = jacksonMapper.readTree(serialized.toString());
             JsonNode headersNode = node.get("headers");
@@ -90,7 +87,7 @@ public class MessageEventSerializer implements EventSerializer {
             JsonNode payloadNode = node.get("payload");
             Object payload = null;
             if (payloadNode.get("_class") != null) {
-                Class<?> payloadType = Class.forName(payloadNode.get("_class").asText());
+                Class<?> payloadType = Class.forName(payloadNode.get("_class").asString());
                 if (payloadNode instanceof ObjectNode objectNode) {
                     objectNode.remove("_class");
                 }
@@ -104,28 +101,18 @@ public class MessageEventSerializer implements EventSerializer {
         return jacksonDeserialize(serialized, type);
     }
 
-    protected <T> T deserializePayload(TreeNode payloadNode, Class<T> payloadType) throws JsonProcessingException {
+    protected <T> T deserializePayload(TreeNode payloadNode, Class<T> payloadType) {
         return jacksonMapper.treeToValue(payloadNode, payloadType);
     }
 
     protected Object jacksonSerialize(Object event) {
-        try {
-            var map = serializeToMap(event);
-            return jacksonMapper.writeValueAsString(map);
-        }
-        catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        var map = serializeToMap(event);
+        return jacksonMapper.writeValueAsString(map);
     }
 
     protected <T> T jacksonDeserialize(Object serialized, Class<T> type) {
-        try {
-            JsonNode node = jacksonMapper.readTree(serialized.toString());
-            return (T) jacksonMapper.readerFor(type).readValue(node);
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        JsonNode node = jacksonMapper.readTree(serialized.toString());
+        return (T) jacksonMapper.readerFor(type).readValue(node);
     }
 
     protected Map<String, String> extractHeaderTypes(Map<String, Object> headers) {

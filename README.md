@@ -33,6 +33,19 @@ This project was built and tested with the following versions:
 | 1.0.x                      | 1.4.x           | 3.4.x       | 2024.0.0     | 2.2.1.RELEASE |
 | 1.1.x                      | 2.0.x           | 4.0.x       | 2025.1.0     | 2.2.1.RELEASE |
 | 1.2.x                      | 2.1.x           | 4.1.x       | 2025.1.0     | 2.2.1.RELEASE |
+| 1.3.x                      | 2.1.x           | 4.1.x       | 2025.1.0     | 5.0.x ¹       |
+
+¹ Starting with 1.3.x, Avro integration tests use `org.springframework.cloud:spring-cloud-stream-schema-registry-client`
+(its version is managed by the Spring Cloud BOM), which replaces the discontinued `spring-cloud-stream-schema` artifact.
+The SCSt Schema column lists the Avro message converter library used in tests. It is not a dependency of this library.
+
+Version 1.3.0 requires Jackson 3 (`tools.jackson.*`). It uses the application's
+`tools.jackson.databind.json.JsonMapper` bean when one is present (e.g. provided by Spring Boot via
+`spring-boot-starter-jackson`), and otherwise falls back to a default `JsonMapper`, so a Jackson
+customization only applies to event serialization if it is exposed as a `JsonMapper` bean. Jackson 2's `com.fasterxml.jackson.databind.ObjectMapper`
+is no longer supported. Applications that still use `spring-boot-jackson2` or provide only a
+Jackson 2 `ObjectMapper` should remain on the 1.2.x line or migrate their Jackson configuration
+before upgrading.
 
 ### Configuration
 Use `@EnableSpringCloudStreamEventExternalization` annotation to enable Spring Cloud Stream event externalization in your Spring configuration:
@@ -47,10 +60,6 @@ public class SpringCloudStreamEventsConfig {
 
 This configuration ensures that, in addition to events annotated with `@Externalized`, all events of type `org.springframework.messaging.Message` with a header named `SpringCloudStreamEventExternalizer.SPRING_CLOUD_STREAM_EVENT_HEADER` will be externalized and routed to their specified destination using the value of this header as the routing target.
 
-If using Spring-Boot 4, you need to either provide a `com.fasterxml.jackson.databind.ObjectMapper` bean or add `org.springframework.boot:spring-boot-jackson2` as dependency.
-
----
-
 ## Event Serialization
 
 Using the transactional event publication log requires serializing events to a format that can be stored in a database. Since the generic type of `Message<?>` payload is lost when using the default `JacksonEventSerializer`, this library adds an extra `_class` field to preserve payload type information, allowing for complete deserialization to its original type.
@@ -59,14 +68,16 @@ This library provides support for POJO (JSON) and Avro serialization formats for
 
 ### Avro Serialization
 
-Avro serialization needs `com.fasterxml.jackson.dataformat.avro.AvroMapper` class present in the classpath. In order to use Avro serialization, you need to add the following dependency to your project:
+Avro serialization needs `tools.jackson.dataformat.avro.AvroMapper` on the classpath. To use Avro serialization, add the following dependency to your project:
 
 ```xml
 <dependency>
-    <groupId>com.fasterxml.jackson.dataformat</groupId>
+    <groupId>tools.jackson.dataformat</groupId>
     <artifactId>jackson-dataformat-avro</artifactId>
 </dependency>
 ```
+
+Both Apache Avro 1.11.x and 1.12.x are supported. This library is intentionally built and tested against Avro 1.11.x as its baseline, so projects that have not yet moved to 1.12 can keep using it.
 
 ---
 
