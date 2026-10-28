@@ -9,7 +9,7 @@
 Spring-Modulith Events Externalizer that uses Spring Cloud Stream supporting both JSON and Avro serialization formats.
 
 Check out the blog post here: https://www.zenwave360.io/posts/Spring-Modulith-Events-Spring-Cloud-Stream-Externalizer/
-Companion sample project: https://github.com/EDALearn/EDA-TransactionalOutbox-Modulith-JPA
+Companion sample project: https://github.com/ZenWave360/zenwave-playground/tree/main/examples/transactional-outbox-modulith-jpa
 
 ## Getting Started
 
