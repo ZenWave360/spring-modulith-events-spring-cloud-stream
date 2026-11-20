@@ -29,14 +29,12 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.messaging.Message;
 import org.springframework.modulith.events.EventExternalizationConfiguration;
-import org.springframework.modulith.events.RoutingTarget;
 import org.springframework.modulith.events.config.EventExternalizationAutoConfiguration;
-import org.springframework.modulith.events.support.DelegatingEventExternalizer;
+import org.springframework.modulith.events.support.EventExternalizerModuleListener;
 
 /**
- * Auto-configuration to set up a {@link DelegatingEventExternalizer} to externalize
+ * Auto-configuration to set up an {@link EventExternalizerModuleListener} to externalize
  * events to Spring Cloud Stream.
  *
  * @author ivangsa
@@ -53,7 +51,7 @@ public class SpringCloudStreamEventExternalizerConfiguration {
     private static final Logger log = LoggerFactory.getLogger(SpringCloudStreamEventExternalizerConfiguration.class);
 
     @Bean
-    DelegatingEventExternalizer springCloudStreamMessageExternalizer(EventExternalizationConfiguration configuration,
+    EventExternalizerModuleListener springCloudStreamMessageExternalizer(EventExternalizationConfiguration configuration,
             StreamBridge streamBridge, BeanFactory factory, BindingServiceProperties bindingServiceProperties,
             BinderFactory binderFactory) {
         log.debug("Registering domain event externalization to Spring Cloud Stream…");
@@ -61,8 +59,11 @@ public class SpringCloudStreamEventExternalizerConfiguration {
         var context = new StandardEvaluationContext();
         context.setBeanResolver(new BeanFactoryResolver(factory));
 
-        return new DelegatingEventExternalizer(configuration, new SpringCloudStreamEventExternalizer(configuration,
-                context, streamBridge, bindingServiceProperties, binderFactory));
+        var externalizer = new SpringCloudStreamEventExternalizer(configuration, context, streamBridge,
+                bindingServiceProperties, binderFactory);
+
+        return new EventExternalizerModuleListener(configuration,
+                (payload, target) -> externalizer.apply(target, payload));
     }
 
 }
