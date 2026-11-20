@@ -11,14 +11,23 @@ jobs:
 
     # main only tracks stable (GA) releases; next tracks the newest version,
     # including pre-releases (RC/M), so API changes are absorbed there first.
+    # Maintenance branches stay pinned to their Modulith/Boot minor line.
     strategy:
       fail-fast: false
       matrix:
         include:
           - branch: main
             allow-prerelease: false
+            modulith-line: '2'
+            boot-line: '4'
           - branch: next
             allow-prerelease: true
+            modulith-line: '2'
+            boot-line: '4'
+          - branch: maintenance/1.3.x
+            allow-prerelease: false
+            modulith-line: '2.1'
+            boot-line: '4.1'
 
     steps:
       - name: Checkout repository
@@ -44,6 +53,8 @@ jobs:
         id: update-parent-pom
         env:
           ALLOW_PRERELEASE: ${{ matrix.allow-prerelease }}
+          MODULITH_LINE: ${{ matrix.modulith-line }}
+          BOOT_LINE: ${{ matrix.boot-line }}
         run: |
           # Picks the highest stable (non-qualified) version. When pre-releases are
           # allowed, only falls back to a pre-release (RC/M/SNAPSHOT) when its X.Y.Z is
@@ -70,12 +81,18 @@ jobs:
             fi
           }
 
-          MODULITH_VERSIONS=$(curl -s "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" | grep -oP '<version>2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '2\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?')
+          # Lists versions from maven-metadata.xml belonging to a version line (e.g. "2" or "2.1").
+          list_versions() {
+            local url="$1" line="${2//./\\.}"
+            curl -s "$url" | grep -oP '<version>\K[0-9]+\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?(?=</version>)' | grep -P "^${line}\."
+          }
+
+          MODULITH_VERSIONS=$(list_versions "https://repo1.maven.org/maven2/org/springframework/modulith/spring-modulith-events/maven-metadata.xml" "$MODULITH_LINE")
           NEW_VERSION=$(pick_latest "$MODULITH_VERSIONS")
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
 
           # Get latest Spring Boot 4.x version, same stable-over-prerelease rule
-          SPRING_BOOT_VERSIONS=$(curl -s "https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/maven-metadata.xml" | grep -oP '<version>4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?</version>' | grep -oP '4\.[0-9]+\.[0-9]+(-[A-Z0-9]+)?')
+          SPRING_BOOT_VERSIONS=$(list_versions "https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/maven-metadata.xml" "$BOOT_LINE")
           SPRING_BOOT_VERSION=$(pick_latest "$SPRING_BOOT_VERSIONS")
           echo "SPRING_BOOT_VERSION=$SPRING_BOOT_VERSION" >> $GITHUB_OUTPUT
 
