@@ -2,7 +2,7 @@ name: Build and Publish Snapshots
 
 on:
   push:
-    branches: [develop, next]
+    branches: [develop, next, "maintenance/**"]
   workflow_dispatch:
     inputs:
       publish-snapshots:
